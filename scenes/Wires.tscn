@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1oiscmnsl5bg"]
+
+[ext_resource type="Texture2D" uid="uid://d1hgfui5ucg7x" path="res://sprites/Wires/Elbow.png" id="1_fgxpa"]
+[ext_resource type="Texture2D" uid="uid://qu72u4xhf00s" path="res://sprites/Wires/Loop.png" id="2_lrsy1"]
+[ext_resource type="Texture2D" uid="uid://bhqoymq8jrb34" path="res://sprites/Wires/LoopElbow.png" id="3_ew6ff"]
+[ext_resource type="Texture2D" uid="uid://c5pfqtk2svsed" path="res://sprites/Wires/Straight.png" id="4_ggh8h"]
+
+[node name="Wires" type="Node"]
+
+[node name="Elbow" type="TextureRect" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_fgxpa")
+
+[node name="Loop" type="TextureRect" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_lrsy1")
+
+[node name="LoopElbow" type="TextureRect" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_ew6ff")
+
+[node name="Straight" type="TextureRect" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_ggh8h")

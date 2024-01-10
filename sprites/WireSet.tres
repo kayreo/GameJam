@@ -1,0 +1,14 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bivsj4n2mm47e"]
+
+[ext_resource type="Texture2D" uid="uid://cgp4bue5r0d55" path="res://sprites/protowire.png" id="1_x7pa7"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l8iyy"]
+texture = ExtResource("1_x7pa7")
+texture_region_size = Vector2i(30, 30)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_l8iyy")

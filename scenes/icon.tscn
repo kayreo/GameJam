@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://4ovrit8qcbd1"]
+
+[ext_resource type="Texture2D" uid="uid://bk3oxyikyakgu" path="res://sprites/loona lol.jpg" id="1_823ab"]
+[ext_resource type="Script" path="res://scripts/Icon.cs" id="2_se2kj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yqtbj"]
+size = Vector2(32, 32)
+
+[node name="Icon" type="TextureRect"]
+texture = ExtResource("1_823ab")
+script = ExtResource("2_se2kj")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_yqtbj")
+
+[connection signal="input_event" from="Area2D" to="." method="_OnArea2DInputEvent"]
