@@ -1,9 +1,20 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class BoardManager : Node
 {
+	public enum Position {
+		Left,
+		Top,
+		Right,
+		Bottom
+	}
 
+	// Index 0: Elbow, Index 1: Straight
+	// Sub Index 0: Entrance, Index 1: Exit
+	public Godot.Collections.Array<Godot.Collections.Array<Position>> WirePos = new Godot.Collections.Array<Godot.Collections.Array<Position>>();
 	private Node CurClick;
 	
 	private Node SwapClick;
@@ -13,7 +24,7 @@ public partial class BoardManager : Node
 	Godot.Collections.Array<Node> Wires;
 
 	[Signal]
-	public delegate void SetGridInfoEventHandler(string WhichNode, string TypeName, float CurLifetime);
+	public delegate void SetGridInfoEventHandler(string WhichNode, string TypeNam);
 
 	[Signal]
 	public delegate void ChangeGridEventHandler(string WhichNode, Icon NodeToSwap);
@@ -27,6 +38,20 @@ public partial class BoardManager : Node
 	{
 		GridNodes = GetTree().GetNodesInGroup("Grid");
 		Wires = GetTree().GetNodesInGroup("Wire");
+		Godot.Collections.Array<Position> ToAddPos = new Godot.Collections.Array<Position>();
+
+		// Elbow
+		ToAddPos.Add(Position.Left);
+		ToAddPos.Add(Position.Top);
+		WirePos.Add(ToAddPos);
+
+		// Straight
+		ToAddPos = new Godot.Collections.Array<Position>();
+		ToAddPos.Add(Position.Left);
+		ToAddPos.Add(Position.Right);
+		WirePos.Add(ToAddPos);
+
+		GD.Print("Wire positions: ", WirePos);
 	}
 
 	/*     var vec = get_viewport().get_mouse_position() - self.position # getting the vector from self to the mouse

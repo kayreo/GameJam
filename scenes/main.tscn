@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6ey4du8m7sx1"]
+[gd_scene load_steps=7 format=3 uid="uid://b6ey4du8m7sx1"]
 
 [ext_resource type="PackedScene" uid="uid://4ovrit8qcbd1" path="res://scenes/icon.tscn" id="1_7208l"]
 [ext_resource type="Script" path="res://scenes/Board.cs" id="1_a1vsv"]
-[ext_resource type="Texture2D" uid="uid://b23cb0u3dm0u5" path="res://sprites/paint.jpg" id="2_o3fol"]
 [ext_resource type="Texture2D" uid="uid://d1hgfui5ucg7x" path="res://sprites/Wires/Elbow.png" id="3_20bwl"]
 [ext_resource type="Texture2D" uid="uid://qu72u4xhf00s" path="res://sprites/Wires/Loop.png" id="4_81qdn"]
 [ext_resource type="Texture2D" uid="uid://bhqoymq8jrb34" path="res://sprites/Wires/LoopElbow.png" id="5_w3og3"]
@@ -28,6 +27,7 @@ offset_bottom = -234.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+theme_override_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -41,7 +41,6 @@ layout_mode = 2
 
 [node name="2" parent="VBoxContainer/HBoxContainer" groups=["Grid"] instance=ExtResource("1_7208l")]
 layout_mode = 2
-texture = ExtResource("2_o3fol")
 
 [node name="3" parent="VBoxContainer/HBoxContainer" groups=["Grid"] instance=ExtResource("1_7208l")]
 layout_mode = 2
@@ -131,7 +130,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("3_20bwl")
 
-[node name="Loop" type="TextureRect" parent="." groups=["Wire"]]
+[node name="LoopStraight" type="TextureRect" parent="." groups=["Wire"]]
 visible = false
 offset_right = 40.0
 offset_bottom = 40.0
@@ -150,4 +149,5 @@ offset_bottom = 40.0
 texture = ExtResource("6_lxgmp")
 
 [node name="FollowBox" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("4_81qdn")

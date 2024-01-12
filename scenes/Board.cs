@@ -18,12 +18,46 @@ public partial class Board : Node
 		BoardManager.ClickNode += OnClickNode;
 		GridNodes = GetTree().GetNodesInGroup("Grid");
 		Wires = GetTree().GetNodesInGroup("Wire");
-		for (int i = 0; i < GridNodes.Count; i++) {
+
+		// Always set first tile to be a straight wire
+		Icon GridNode = (Icon)GridNodes[0];
+		TextureRect WireNode = (TextureRect)Wires[3];
+		GridNode.GetNode<Sprite2D>("Wire").Texture = WireNode.Texture;
+		GridNode.GetNode<AnimatedSprite2D>("WireAnim").Animation = WireNode.Name;
+
+		BoardManager.EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
+
+		Godot.Collections.Array<BoardManager.Position> ToAddPos = BoardManager.WirePos[1];
+
+		GridNode.EnterPos = ToAddPos[0];
+		GridNode.ExitPos = ToAddPos[1];
+
+		// Randomly fill other tiles
+		for (int i = 1; i < GridNodes.Count; i++) {
 			//GD.Print(GridNodes[i]);
-			TextureRect GridNode = (TextureRect)GridNodes[i];
-			TextureRect WireNode = (TextureRect)Wires.PickRandom();
-			GridNode.Texture = WireNode.Texture;
-			BoardManager.EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name, 0.0);
+			GridNode = (Icon)GridNodes[i];
+			WireNode = (TextureRect)Wires.PickRandom();
+			string WireName = WireNode.Name;
+
+			GD.Print("Wire type: ", WireName);
+
+			if (WireName.Contains("Elbow")) {
+				ToAddPos = BoardManager.WirePos[0];
+			}
+
+			if (WireName.Contains("Straight")) {
+				ToAddPos = BoardManager.WirePos[1];
+			}
+
+			GridNode.EnterPos = ToAddPos[0];
+			GridNode.ExitPos = ToAddPos[1];
+
+			GD.Print("Starting positions: ", GridNode.EnterPos, " ", GridNode.ExitPos);
+
+			GridNode.GetNode<Sprite2D>("Wire").Texture = WireNode.Texture;
+			GridNode.GetNode<AnimatedSprite2D>("WireAnim").Animation = WireName;
+			//GridNode.GetNode<Sprite2D>("WireFilling").Texture = WireNode.GetNode<TextureRect>("Full").Texture;
+			BoardManager.EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
 		}
 	}
 
@@ -35,14 +69,14 @@ public partial class Board : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (ClickedNode != null) {
-			GD.Print(GetViewport().GetMousePosition());
-			Sprite2D Follow = GetNode<Sprite2D>("FollowBox");
-			Follow.Texture = ClickedNode.Texture;
-			Vector2 Pos = GetViewport().GetMousePosition() - Follow.Position;
-			Follow.Position = Pos * (float)delta * 10000;
-			//GD.Print("Sprite pos: ", Follow.Position);
-		}
+		// if (ClickedNode != null) {
+		// 	GD.Print(GetViewport().GetMousePosition());
+		// 	Sprite2D Follow = GetNode<Sprite2D>("FollowBox");
+		// 	Follow.Texture = ClickedNode.Texture;
+		// 	Vector2 Pos = GetViewport().GetMousePosition() - Follow.Position;
+		// 	Follow.Position = Pos * (float)delta * 10000;
+		// 	//GD.Print("Sprite pos: ", Follow.Position);
+		// }
 	}
 
 	private void OnClickNode(Icon WhichNode) {
