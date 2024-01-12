@@ -31,6 +31,7 @@ public partial class Board : Node
 
 		GridNode.EnterPos = ToAddPos[0];
 		GridNode.ExitPos = ToAddPos[1];
+		GridNode.TargetConnect = BoardManager.Position.Left;
 
 		// Randomly fill other tiles
 		for (int i = 1; i < GridNodes.Count; i++) {
@@ -43,10 +44,12 @@ public partial class Board : Node
 
 			if (WireName.Contains("Elbow")) {
 				ToAddPos = BoardManager.WirePos[0];
+				GridNode.TargetConnect = BoardManager.Position.Bottom;
 			}
 
 			if (WireName.Contains("Straight")) {
 				ToAddPos = BoardManager.WirePos[1];
+				GridNode.TargetConnect = BoardManager.Position.Left;
 			}
 
 			GridNode.EnterPos = ToAddPos[0];
