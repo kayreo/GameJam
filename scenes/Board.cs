@@ -39,7 +39,7 @@ public partial class Board : Node
 			WireNode = (TextureRect)Wires.PickRandom();
 			string WireName = WireNode.Name;
 
-			GD.Print("Wire type: ", WireName);
+		//	GD.Print("Wire type: ", WireName);
 
 			if (WireName.Contains("Elbow")) {
 				ToAddPos = BoardManager.WirePos[0];
@@ -52,13 +52,14 @@ public partial class Board : Node
 			GridNode.EnterPos = ToAddPos[0];
 			GridNode.ExitPos = ToAddPos[1];
 
-			GD.Print("Starting positions: ", GridNode.EnterPos, " ", GridNode.ExitPos);
+		//	GD.Print("Starting positions: ", GridNode.EnterPos, " ", GridNode.ExitPos);
 
 			GridNode.GetNode<Sprite2D>("Wire").Texture = WireNode.Texture;
 			GridNode.GetNode<AnimatedSprite2D>("WireAnim").Animation = WireName;
 			//GridNode.GetNode<Sprite2D>("WireFilling").Texture = WireNode.GetNode<TextureRect>("Full").Texture;
 			BoardManager.EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
 		}
+
 	}
 
 /*     var vec = get_viewport().get_mouse_position() - self.position # getting the vector from self to the mouse

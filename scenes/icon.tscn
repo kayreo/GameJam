@@ -270,6 +270,7 @@ texture = ExtResource("3_yj7ws")
 position = Vector2(15, 15)
 sprite_frames = SubResource("SpriteFrames_qwjtt")
 animation = &"Straight"
+speed_scale = 0.25
 
 [connection signal="input_event" from="Area2D" to="." method="_OnArea2DInputEvent"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_OnArea2DMouseEntered"]

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class Icon : TextureRect
 {
@@ -38,6 +39,7 @@ public partial class Icon : TextureRect
 		WireAnim = GetNode<AnimatedSprite2D>("WireAnim");
 		WireAnim.Play();
 		IsClicked = false;
+		GetAdjacents();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -106,6 +108,66 @@ public partial class Icon : TextureRect
 			GetNode<TextureRect>("SelectBorder").Hide();
 			NodeToSwap.GetNode<TextureRect>("SelectBorder").Hide();
 		}
+	}
+
+	public Godot.Collections.Dictionary GetAdjacents() {
+		Godot.Collections.Dictionary result = new Godot.Collections.Dictionary() {
+			{0, -1},
+			{1, -1},
+			{2, -1},
+			{3, -1}
+		};
+		// Need to get icons left, right, above, below
+		string CurRow = GetParent().Name;
+		int CurRowNum = CurRow[3] - '0';
+		int AboveRow = CurRowNum - 1;
+		int BelowRow = CurRowNum + 1;
+		int IndexOfSelf = GetParent().GetChildren().IndexOf(this);
+		int LeftIndex = IndexOfSelf - 1;
+		int RightIndex = IndexOfSelf + 1;
+
+		if (LeftIndex >= 0) {
+			result[0] = ((Icon)GetParent().GetChild(LeftIndex));
+		}
+
+		if (AboveRow >= 0) {
+			//GD.Print("Getting: ", GetParent().GetParent().GetNode<HBoxContainer>("Row" + AboveRow).GetChild(IndexOfSelf).Name);
+			result[1] = ((Icon)GetParent().GetParent().GetNode<HBoxContainer>("Row" + AboveRow).GetChild(IndexOfSelf));
+		}
+
+		if (RightIndex < GetParent().GetChildCount()) {
+			result[2] = ((Icon)GetParent().GetChild(RightIndex));
+		}
+
+		if (BelowRow < GetParent().GetParent().GetChildCount()) {
+			//GD.Print("Below adding ", " Row" + BelowRow);
+			//GD.Print("Getting: ", GetParent().GetParent().GetNode<HBoxContainer>("Row" + BelowRow).GetChild(IndexOfSelf).Name);
+			result[3] = ((Icon)GetParent().GetParent().GetNode<HBoxContainer>("Row" + BelowRow).GetChild(IndexOfSelf));
+		}
+
+		GD.Print("Adjacents loaded for ", Name);
+		Icon printName1 = (Icon)result[(int)BoardManager.Position.Left];
+		if (printName1 != null) {
+			GD.Print("Left ", printName1.Name);
+		}
+		Icon printName2 = (Icon)result[(int)BoardManager.Position.Top];
+		if (printName2 != null) {
+			GD.Print("Above, ", printName2.Name);
+		}
+		Icon printName3 = (Icon)result[(int)BoardManager.Position.Right];
+		if (printName3 != null) {
+			GD.Print("Right, ", printName3.Name);
+		}
+		Icon printName4 = (Icon)result[(int)BoardManager.Position.Bottom];
+		if (printName4 != null) {
+			GD.Print("Below, ", printName4.Name);
+		}
+
+		//GD.Print("Index of me: ", IndexOfSelf);
+		//GD.Print("Above: ", AboveRow);
+		//GD.Print("Below: ", BelowRow);
+		//GD.Print("Row" + CurRowNum);
+		return result;
 	}
 
 }
