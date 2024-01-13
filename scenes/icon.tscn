@@ -501,20 +501,22 @@ position = Vector2(15, 15)
 shape = SubResource("RectangleShape2D_yqtbj")
 
 [node name="Wire" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(15, 15)
 texture = ExtResource("4_hba0l")
 
 [node name="SelectBorder" type="TextureRect" parent="."]
 visible = false
+layout_mode = 0
 offset_right = 30.0
 offset_bottom = 30.0
 texture = ExtResource("3_yj7ws")
 
 [node name="WireAnim" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
 position = Vector2(15, 15)
 sprite_frames = SubResource("SpriteFrames_qwjtt")
 animation = &"LoopElbowR"
-speed_scale = 0.25
 
 [connection signal="input_event" from="Area2D" to="." method="_OnArea2DInputEvent"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_OnArea2DMouseEntered"]

@@ -1,0 +1,148 @@
+[gd_scene load_steps=7 format=3 uid="uid://borl80bjqe1m6"]
+
+[ext_resource type="Script" path="res://scripts/boards/Board.cs" id="1_wu4y3"]
+[ext_resource type="PackedScene" uid="uid://4ovrit8qcbd1" path="res://scenes/icon.tscn" id="2_3f5bm"]
+[ext_resource type="Texture2D" uid="uid://d1hgfui5ucg7x" path="res://sprites/Wires/Elbow.png" id="3_72805"]
+[ext_resource type="Texture2D" uid="uid://qu72u4xhf00s" path="res://sprites/Wires/Loop.png" id="4_e1avr"]
+[ext_resource type="Texture2D" uid="uid://bhqoymq8jrb34" path="res://sprites/Wires/LoopElbow.png" id="5_3g48d"]
+[ext_resource type="Texture2D" uid="uid://c5pfqtk2svsed" path="res://sprites/Wires/Straight.png" id="6_1h6iw"]
+
+[node name="Board" type="Node"]
+script = ExtResource("1_wu4y3")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2.05, 2.05)
+
+[node name="Grid" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -395.0
+offset_top = -315.0
+offset_right = -245.0
+offset_bottom = -165.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 0
+
+[node name="Row0" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="0" parent="Grid/Row0" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="1" parent="Grid/Row0" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="2" parent="Grid/Row0" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="3" parent="Grid/Row0" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="4" parent="Grid/Row0" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="Row1" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="5" parent="Grid/Row1" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="6" parent="Grid/Row1" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="7" parent="Grid/Row1" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="8" parent="Grid/Row1" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="9" parent="Grid/Row1" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="Row2" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="10" parent="Grid/Row2" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="11" parent="Grid/Row2" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="12" parent="Grid/Row2" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="13" parent="Grid/Row2" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="14" parent="Grid/Row2" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="Row3" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="15" parent="Grid/Row3" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="16" parent="Grid/Row3" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="17" parent="Grid/Row3" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="18" parent="Grid/Row3" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="19" parent="Grid/Row3" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="Row4" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="20" parent="Grid/Row4" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="21" parent="Grid/Row4" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="22" parent="Grid/Row4" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="23" parent="Grid/Row4" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="24" parent="Grid/Row4" groups=["Grid"] instance=ExtResource("2_3f5bm")]
+layout_mode = 2
+
+[node name="Elbow" type="TextureRect" parent="." groups=["Wire"]]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_72805")
+
+[node name="LoopStraight" type="TextureRect" parent="." groups=["Wire"]]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_e1avr")
+
+[node name="LoopElbow" type="TextureRect" parent="." groups=["Wire"]]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("5_3g48d")
+
+[node name="Straight" type="TextureRect" parent="." groups=["Wire"]]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("6_1h6iw")

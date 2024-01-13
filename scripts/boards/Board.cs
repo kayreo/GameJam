@@ -5,11 +5,11 @@ public partial class Board : Node
 {
 	private Icon ClickedNode;
 
-	private BoardManager BoardManager;
+	protected BoardManager BoardManager;
 
-	Godot.Collections.Array<Node> GridNodes;
+	protected Godot.Collections.Array<Node> GridNodes;
 
-	Godot.Collections.Array<Node> Wires;
+	protected Godot.Collections.Array<Node> Wires;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -62,7 +62,9 @@ public partial class Board : Node
 			//GridNode.GetNode<Sprite2D>("WireFilling").Texture = WireNode.GetNode<TextureRect>("Full").Texture;
 			BoardManager.EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
 		}
-
+		GridNode = (Icon)GridNodes[0];
+		GridNode.GetNode<AnimatedSprite2D>("WireAnim").SpeedScale = 0.5F;
+		GridNode.OnNodeStart();
 	}
 
 /*     var vec = get_viewport().get_mouse_position() - self.position # getting the vector from self to the mouse

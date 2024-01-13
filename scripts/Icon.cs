@@ -13,7 +13,7 @@ public partial class Icon : TextureRect
 	If not, game over
 	*/
 
-	private Godot.Collections.Dictionary Adj = new Godot.Collections.Dictionary() {
+	public Godot.Collections.Dictionary Adj = new Godot.Collections.Dictionary() {
 			{0, -1},
 			{1, -1},
 			{2, -1},
@@ -26,9 +26,6 @@ public partial class Icon : TextureRect
 	public bool IsClicked = false;
 
 	string WireType;
-
-	[Export]
-	public int Lifespan = 0;
 	
 	private int MaxLifespan = 0;
 
@@ -41,9 +38,14 @@ public partial class Icon : TextureRect
 	[Export]
 	public BoardManager.Position TargetConnect;
 
-	private AnimatedSprite2D WireAnim;
+	public AnimatedSprite2D WireAnim;
 
 	private bool WireFilling = false;
+
+	public bool Locked = false;
+
+	[Signal]
+	public delegate void ChangeActiveNodeEventHandler(Icon WhichNode);
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -53,10 +55,8 @@ public partial class Icon : TextureRect
 		BoardManager.ChangeGrid += OnChangeGrid;
 		WireAnim = GetNode<AnimatedSprite2D>("WireAnim");
 		IsClicked = false;
+		ChangeActiveNode += BoardManager.OnChangeActiveNode;
 		GetAdjacents();
-		if (Name == "0") {
-			OnNodeStart();
-		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -67,45 +67,33 @@ public partial class Icon : TextureRect
 		}
 		if (WireFilling) { 
 			if (WireAnim.Frame == MaxLifespan) {
-				WireFilling = false;
-				WireAnim.SpeedScale = 0;
-				// get exit position grid
-				Icon Exit = (Icon)Adj[(int)ExitPos];
-				GD.Print("Exiting into: ", Exit.Name);
-				GD.Print("Targeting: ", TargetConnect);
-				GD.Print("Entering from: ", Exit.EnterPos);
-				GD.Print("Or: ", Exit.ExitPos);
-				bool reverse = false;
-				// Can enter from Left, Right, Top, Bottom
-				if (TargetConnect == Exit.EnterPos || TargetConnect == Exit.ExitPos) {
-					GD.Print("Connecting");
-					if (TargetConnect == Exit.ExitPos) {
-						BoardManager.Position OriginalPos = Exit.EnterPos;
-						Exit.EnterPos = Exit.ExitPos;
-						Exit.ExitPos = OriginalPos;
-						GD.Print("Need to reverse");
-						reverse = true;
+					WireFilling = false;
+					WireAnim.SpeedScale = 0;
+					// get exit position grid
+					Icon Exit = (Icon)Adj[(int)ExitPos];
+					if (Exit != null) {
+					Exit.Locked = true;
+					// GD.Print("Exiting into: ", Exit.Name);
+					// GD.Print("Targeting: ", TargetConnect);
+					// GD.Print("Entering from: ", Exit.EnterPos);
+					// GD.Print("Or: ", Exit.ExitPos);
+					bool reverse = false;
+					// Can enter from Left, Right, Top, Bottom
+					if (TargetConnect == Exit.EnterPos || TargetConnect == Exit.ExitPos) {
+						//GD.Print("Connecting");
+						if (TargetConnect == Exit.ExitPos) {
+							BoardManager.Position OriginalPos = Exit.EnterPos;
+							Exit.EnterPos = Exit.ExitPos;
+							Exit.ExitPos = OriginalPos;
+							//GD.Print("Need to reverse");
+							reverse = true;
+						}
+						OnSuccessEnter(Exit, reverse);
 					}
-					OnSuccessEnter(Exit, reverse);
+				} else {
+					GD.Print("Game over");
 				}
 			}
-			// 	if (WireType.Contains("Straight")) {
-			// 		// Two straights: 
-			// 		if (Exit.WireType.Contains("Straight")) {
-
-			// 		} 
-			// 		else if (Exit.WireType.Contains("Elbow")) {
-
-			// 		}
-			// 	} else if (WireType.Contains("Elbow")) {
-			// 		if (Exit.WireType.Contains("Straight")) {
-
-			// 		} 
-			// 		else if (Exit.WireType.Contains("Elbow")) {
-
-			// 		}
-			// 	}
-			// }
 		}
 	}
 
@@ -123,7 +111,7 @@ public partial class Icon : TextureRect
 	}
 
 	private void _OnArea2DInputEvent(Node viewport, InputEvent @event, int shape_idx) {
-		if (WireAnim.Frame == 0) {
+		if (WireAnim.Frame == 0 && !Locked) {
 			if (@event is InputEventMouseButton && @event.IsPressed()) {
 				var btn = @event as InputEventMouseButton;
 				if (btn.ButtonIndex == MouseButton.Left) {
@@ -216,8 +204,9 @@ public partial class Icon : TextureRect
 		}
 	}
 
-	private void OnNodeStart() {
+	public void OnNodeStart() {
 		WireAnim.Play();
+		EmitSignal("ChangeActiveNode", this);
 		WireFilling = true;
 	}
 

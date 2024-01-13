@@ -1,0 +1,16 @@
+{
+	"Level0": {
+		"0": [
+			"01", "11",
+			"Meow meow meow meow meow"
+		],
+		"1": [
+			"01", "11",
+			"Woof woof woof woof"
+		],
+		"2": [
+			"01", "11",
+			"Neigh neigh neigh neigh"
+		]
+	}
+}

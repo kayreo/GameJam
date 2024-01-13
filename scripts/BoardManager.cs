@@ -19,6 +19,8 @@ public partial class BoardManager : Node
 	
 	private Node SwapClick;
 
+	private Icon ActiveIcon;
+
 	Godot.Collections.Array<Node> GridNodes;
 
 	Godot.Collections.Array<Node> Wires;
@@ -31,6 +33,13 @@ public partial class BoardManager : Node
 
 	[Signal]
 	public delegate void ClickNodeEventHandler(Icon WhichNode);
+
+	[Signal]
+	public delegate void TriggerDialogueEventHandler(string DialogueText);
+
+	public bool LevelEnd = false;
+
+	public bool LevelSuccess = false;
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -81,6 +90,21 @@ public partial class BoardManager : Node
 			EmitSignal("ChangeGrid", CurClick.Name, (Icon)SwapClick);
 			CurClick = null;
 			SwapClick = null;
+		}
+	}
+
+	public void OnChangeActiveNode(Icon WhichNode) {
+		GD.Print("Active Node!", WhichNode.Name);
+		ActiveIcon = WhichNode;
+		if (GridNodes.IndexOf((Node)ActiveIcon) == GridNodes.Count - 1) {
+			if (ActiveIcon.ExitPos == Position.Right) {
+				GD.Print("Reached end and successful!!!");
+				LevelSuccess = true;
+			}
+			else {
+				GD.Print("Reached end and NOT successful");
+			}
+			LevelEnd = true;
 		}
 	}
 

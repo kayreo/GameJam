@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://5mrey0fomfps"]
+
+[ext_resource type="Script" path="res://scenes/HUD.cs" id="1_2ed7c"]
+[ext_resource type="Texture2D" uid="uid://b2ppe6rljsgoq" path="res://sprites/HUD/Border.png" id="1_ac2h0"]
+[ext_resource type="Texture2D" uid="uid://drwdnecokg6gq" path="res://sprites/HUD/Sidebars.png" id="2_k5nrr"]
+[ext_resource type="Texture2D" uid="uid://bqi51bxmlpbtj" path="res://sprites/HUD/DialogueBox.png" id="3_ppblo"]
+[ext_resource type="Texture2D" uid="uid://b38k4fx6niaky" path="res://sprites/HUD/SubMenu.png" id="4_j4ks6"]
+[ext_resource type="SpriteFrames" uid="uid://cr1ojcdoiv4rc" path="res://scenes/Portraits.tres" id="5_oyuky"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_2ed7c")
+
+[node name="Border" type="TextureRect" parent="."]
+texture_filter = 1
+offset_right = 640.0
+offset_bottom = 428.0
+texture = ExtResource("1_ac2h0")
+
+[node name="Sidebar" type="TextureRect" parent="."]
+texture_filter = 1
+offset_left = 18.0
+offset_top = 6.0
+offset_right = 156.0
+offset_bottom = 412.0
+texture = ExtResource("2_k5nrr")
+
+[node name="DialogueBox" type="TextureRect" parent="."]
+texture_filter = 1
+offset_left = 156.0
+offset_top = 330.0
+offset_right = 480.0
+offset_bottom = 412.0
+texture = ExtResource("3_ppblo")
+
+[node name="Speaker0" type="AnimatedSprite2D" parent="DialogueBox"]
+texture_filter = 1
+position = Vector2(46, 42)
+sprite_frames = ExtResource("5_oyuky")
+animation = &"player0"
+
+[node name="Speaker1" type="AnimatedSprite2D" parent="DialogueBox"]
+texture_filter = 1
+position = Vector2(278, 42)
+sprite_frames = ExtResource("5_oyuky")
+animation = &"player1"
+
+[node name="Dialogue" type="RichTextLabel" parent="DialogueBox"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 90.0
+offset_top = 4.0
+offset_right = 234.0
+offset_bottom = 80.0
+theme_override_font_sizes/normal_font_size = 15
+text = "Meow Meow Meow Meow  Meow Meow  Meow"
+
+[node name="SubMenu" type="TextureRect" parent="."]
+texture_filter = 1
+offset_left = 480.0
+offset_top = 6.0
+offset_right = 618.0
+offset_bottom = 412.0
+texture = ExtResource("4_j4ks6")
+
+[node name="MusicButton" type="Button" parent="SubMenu"]
+offset_left = 8.0
+offset_top = 7.0
+offset_right = 38.0
+offset_bottom = 38.0
+text = "M
+"
+
+[node name="HelpButton" type="Button" parent="SubMenu"]
+offset_left = 42.0
+offset_top = 7.0
+offset_right = 72.0
+offset_bottom = 38.0
+text = "H"
+
+[node name="PauseButton" type="Button" parent="SubMenu"]
+offset_left = 76.0
+offset_top = 7.0
+offset_right = 106.0
+offset_bottom = 38.0
+text = "P"

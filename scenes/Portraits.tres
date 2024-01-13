@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://cr1ojcdoiv4rc"]
+
+[ext_resource type="Texture2D" uid="uid://0w35h7et7ge3" path="res://sprites/HUD/Portraits.png" id="1_4aesd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c1s64"]
+atlas = ExtResource("1_4aesd")
+region = Rect2(76, 0, 76, 76)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v301h"]
+atlas = ExtResource("1_4aesd")
+region = Rect2(0, 0, 76, 76)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0g8uk"]
+atlas = ExtResource("1_4aesd")
+region = Rect2(76, 76, 76, 76)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1n32"]
+atlas = ExtResource("1_4aesd")
+region = Rect2(0, 76, 76, 76)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c1s64")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v301h")
+}],
+"loop": true,
+"name": &"player0",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0g8uk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1n32")
+}],
+"loop": true,
+"name": &"player1",
+"speed": 5.0
+}]
