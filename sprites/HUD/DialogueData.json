@@ -1,5 +1,5 @@
 {
-	"Level0": {
+	"Level0Start": {
 		"0": [
 			"01", "11",
 			"Meow meow meow meow meow"
@@ -14,6 +14,55 @@
 		]
 	},
 	"Level0End": {
+		"0": [
+			"01", "11",
+			"You did it yay"
+		],
+		"1": [
+			"01", "11",
+			"Woof woof woof woof"
+		]
+	},
+
+	"Level1Start": {
+		"0": [
+			"01", "11",
+			"Hey this is level 1"
+		],
+		"1": [
+			"01", "11",
+			"Woof woof woof woof"
+		],
+		"2": [
+			"01", "11",
+			"Neigh neigh neigh neigh"
+		]
+	},
+	"Level1End": {
+		"0": [
+			"01", "11",
+			"You did it yay"
+		],
+		"1": [
+			"01", "11",
+			"Woof woof woof woof"
+		]
+	},
+	"Level2Start": {
+		"0": [
+			"01", "11",
+			"Hey this is level 2!!!!!!"
+		],
+		"1": [
+			"01", "11",
+			"Woof woof woof woof"
+		],
+		"2": [
+			"01", "11",
+			"Neigh neigh neigh neigh"
+		]
+	},
+	"Level2End": {
 		"0": [
 			"01", "11",
 			"You did it yay"

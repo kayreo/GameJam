@@ -166,6 +166,7 @@ texture_normal = ExtResource("7_fv1y4")
 
 [node name="HelpButton" type="TextureButton" parent="SubMenu"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 222.0
 offset_top = -166.0
 offset_right = 237.0
@@ -175,6 +176,7 @@ texture_normal = ExtResource("8_jxfff")
 
 [node name="PauseButton" type="TextureButton" parent="SubMenu"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 256.0
 offset_top = -166.0
 offset_right = 271.0

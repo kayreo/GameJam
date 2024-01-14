@@ -35,6 +35,8 @@ public partial class HUD : CanvasLayer
 
 	private AudioStreamPlayer MusicPlayer;
 
+	private string CurrentScenario;
+
 	[Export]
 	public string CurSpeaker0 = "0";
 
@@ -45,8 +47,19 @@ public partial class HUD : CanvasLayer
 
 	private int CurrentLineIndex = 0;
 
+
+	[Signal]
+	public delegate void EndFirstDialogueEventHandler();
+
 	[Signal]
 	public delegate void EndDialogueEventHandler();
+
+	[Signal]
+	public delegate void TriggerDialogueEventHandler(string DialogueText);
+
+	
+	[Signal]
+	public delegate void StartGameEventHandler();
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -54,6 +67,7 @@ public partial class HUD : CanvasLayer
 	{
 		BoardManager = GetNode<BoardManager>("/root/BoardManager");
 		EndDialogue += BoardManager.OnEndDialogue;
+		EndFirstDialogue += BoardManager.OnFirstEndDialogue;
 		SubMenu = GetNode<TextureRect>("SubMenu");
 		DialogueBox = GetNode<TextureRect>("DialogueBox");
 		Sidebar = GetNode<AnimatedSprite2D>("Border/Sidebar");
@@ -81,14 +95,18 @@ public partial class HUD : CanvasLayer
 
 		GD.Print("Scenarios: ", DialogueScenarios);
 
-		BoardManager.TriggerDialogue += OnDialogueTrigger;
+		TriggerDialogue += OnDialogueTrigger;
 		Dialogue = DialogueBox.GetNode<RichTextLabel>("Dialogue");
 		Speaker0 = DialogueBox.GetNode<AnimatedSprite2D>("Speaker0");
+		GD.Print("Speaker got: ", Speaker0.Name);
 		Speaker0.Animation = "player" + CurSpeaker0;
 		Speaker1 = DialogueBox.GetNode<AnimatedSprite2D>("Speaker1");
 		Speaker1.Animation = "player" + CurSpeaker1;
 		//Dialogue.VisibleCharacters = 0;
-		BoardManager.EmitSignal("TriggerDialogue", "Level0");
+		if (!MusicPlayer.Playing && !BoardManager.Muted) {
+			MusicPlayer.Play();
+		}
+		EmitSignal("TriggerDialogue", BoardManager.CurLevel + "Start");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -130,8 +148,9 @@ public partial class HUD : CanvasLayer
 	// Loads secnario to be printed
 	// DialogueLine parameter is the group of lines to grab from the JSON file
 	private void OnDialogueTrigger(string Scenario) {
-		GD.Print("Received signal");
+		GD.Print("Received signal", Scenario);
 		DialogueData = (Godot.Collections.Dictionary)DialogueScenarios[Scenario];
+		CurrentScenario = Scenario;
 		BoardManager.DialogueActive = true;
 		ContinueDialogue();
 	}
@@ -158,7 +177,12 @@ public partial class HUD : CanvasLayer
 		} else {
 			// key not found, stop dialogue
 			BoardManager.DialogueActive = false;
-			EmitSignal("EndDialogue");
+			if (CurrentScenario.Contains("Start")) {
+				EmitSignal("EndFirstDialogue");
+				EmitSignal("StartGame");
+			} else {
+				EmitSignal("EndDialogue");
+			}
 		}
 	}
 
@@ -172,5 +196,6 @@ public partial class HUD : CanvasLayer
 	public void OnMusicPressed() {
 		GD.Print("Music pressed");
 		MusicPlayer.Playing = !MusicPlayer.Playing;
+		BoardManager.Muted = !BoardManager.Muted;
 	}
 }

@@ -3,6 +3,17 @@ using System;
 
 public partial class Board : Node
 {
+	public enum Position {
+		Left,
+		Top,
+		Right,
+		Bottom
+	}
+
+	// Index 0: Elbow, Index 1: Straight
+	// Sub Index 0: Entrance, Index 1: Exit
+	public Godot.Collections.Array<Godot.Collections.Array<Position>> WirePos = new Godot.Collections.Array<Godot.Collections.Array<Position>>();
+
 	private Icon ClickedNode;
 
 	protected BoardManager BoardManager;
@@ -11,19 +22,44 @@ public partial class Board : Node
 
 	protected Godot.Collections.Array<Node> Wires;
 
+	private Node CurClick;
+	
+	private Node SwapClick;
+
+	private Icon ActiveIcon;
+
 	[Signal]
 	public delegate void SetDataEventHandler();
+
+	[Signal]
+	public delegate void SetGridInfoEventHandler(string WhichNode, string TypeNam);
+
+	[Signal]
+	public delegate void ChangeGridEventHandler(string WhichNode, Icon NodeToSwap);
+
+	[Signal]
+	public delegate void ClickNodeEventHandler(Icon WhichNode);
+
+	[Signal]
+	public delegate void EndLevelEventHandler();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		BoardManager = GetNode<BoardManager>("/root/BoardManager");
-		BoardManager.ClickNode += OnClickNode;
-		SetData += BoardManager.OnSetData;
+		ClickNode += OnClickNode;
+		SetData += OnSetData;
 		EmitSignal("SetData");
+
+		EndLevel += OnEndLevel;
+
+		HUD HUD = (HUD)GetParent().GetNode<CanvasLayer>("HUD");
+
+		HUD.StartGame += OnGameStart;
 
 		GridNodes = GetTree().GetNodesInGroup("Grid");
 		Wires = GetTree().GetNodesInGroup("Wire");
+		GD.Print("Nodes: ", GridNodes);
 
 		// Always set first tile to be a straight wire
 		Icon GridNode = (Icon)GridNodes[0];
@@ -31,17 +67,17 @@ public partial class Board : Node
 		GridNode.GetNode<Sprite2D>("Wire").Texture = WireNode.Texture;
 		GridNode.GetNode<AnimatedSprite2D>("WireAnim").Animation = WireNode.Name;
 
-		BoardManager.EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
+		EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
 
-		Godot.Collections.Array<BoardManager.Position> ToAddPos = BoardManager.WirePos[1];
+		Godot.Collections.Array<Position> ToAddPos = WirePos[1];
 
 		GridNode.EnterPos = ToAddPos[0];
 		GridNode.ExitPos = ToAddPos[1];
-		GridNode.TargetConnect = BoardManager.Position.Left;
+		GridNode.TargetConnect = Position.Left;
 
 		// Randomly fill other tiles
 		for (int i = 1; i < GridNodes.Count; i++) {
-			//GD.Print(GridNodes[i]);
+			//GD.Print(GridNodes[i].Name);
 			GridNode = (Icon)GridNodes[i];
 			WireNode = (TextureRect)Wires.PickRandom();
 			string WireName = WireNode.Name;
@@ -49,13 +85,13 @@ public partial class Board : Node
 		//	GD.Print("Wire type: ", WireName);
 
 			if (WireName.Contains("Elbow")) {
-				ToAddPos = BoardManager.WirePos[0];
-				GridNode.TargetConnect = BoardManager.Position.Bottom;
+				ToAddPos = WirePos[0];
+				GridNode.TargetConnect = Position.Bottom;
 			}
 
 			if (WireName.Contains("Straight")) {
-				ToAddPos = BoardManager.WirePos[1];
-				GridNode.TargetConnect = BoardManager.Position.Left;
+				ToAddPos = WirePos[1];
+				GridNode.TargetConnect = Position.Left;
 			}
 
 			GridNode.EnterPos = ToAddPos[0];
@@ -66,17 +102,9 @@ public partial class Board : Node
 			GridNode.GetNode<Sprite2D>("Wire").Texture = WireNode.Texture;
 			GridNode.GetNode<AnimatedSprite2D>("WireAnim").Animation = WireName;
 			//GridNode.GetNode<Sprite2D>("WireFilling").Texture = WireNode.GetNode<TextureRect>("Full").Texture;
-			BoardManager.EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
+			EmitSignal("SetGridInfo", GridNode.Name, WireNode.Name);
 		}
-		GridNode = (Icon)GridNodes[0];
-		GridNode.GetNode<AnimatedSprite2D>("WireAnim").SpeedScale = 0.5F;
-		GridNode.OnNodeStart();
 	}
-
-/*     var vec = get_viewport().get_mouse_position() - self.position # getting the vector from self to the mouse
-    vec = vec.normalized() * delta * SPEED # normalize it and multiply by time and speed
-    position += vec # move by that vector
-	*/
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -91,9 +119,76 @@ public partial class Board : Node
 		// }
 	}
 
+	public void OnGameStart() {
+		GD.Print("Starting Game");
+		Icon GridNode = (Icon)GridNodes[0];
+		GridNode.GetNode<AnimatedSprite2D>("WireAnim").SpeedScale = 0.5F;
+		GridNode.OnNodeStart();
+	}
+
 	private void OnClickNode(Icon WhichNode) {
 		ClickedNode = WhichNode;
 		GD.Print("Node: ", WhichNode.Name);
+	}
+
+	public void OnSetData() {
+		GridNodes = GetTree().GetNodesInGroup("Grid");
+		Wires = GetTree().GetNodesInGroup("Wire");
+		Godot.Collections.Array<Position> ToAddPos = new Godot.Collections.Array<Position>();
+
+		// Elbow
+		ToAddPos.Add(Position.Left);
+		ToAddPos.Add(Position.Top);
+		WirePos.Add(ToAddPos);
+
+		// Straight
+		ToAddPos = new Godot.Collections.Array<Position>();
+		ToAddPos.Add(Position.Left);
+		ToAddPos.Add(Position.Right);
+		WirePos.Add(ToAddPos);
+
+		GD.Print("Wire positions: ", WirePos);
+	}
+
+
+	public void ClickGridSection(Node Who) {
+		GD.Print("Clicked ", Who.Name);
+		int GetIndex;
+		if (CurClick == null) {
+			GD.Print("First click");
+			GetIndex = GridNodes.IndexOf(Who);
+			EmitSignal("ClickNode", (Icon)Who);
+			CurClick = GridNodes[GetIndex];
+		} else {
+			GD.Print("Second click");
+			GetIndex = GridNodes.IndexOf(Who);
+			SwapClick = GridNodes[GetIndex];
+			EmitSignal("ChangeGrid", CurClick.Name, (Icon)SwapClick);
+			CurClick = null;
+			SwapClick = null;
+		}
+	}
+
+
+	public void OnChangeActiveNode(Icon WhichNode) {
+		GD.Print("Active Node!", WhichNode.Name);
+		ActiveIcon = WhichNode;
+		if (GridNodes.IndexOf((Node)ActiveIcon) == GridNodes.Count - 1) {
+			if (ActiveIcon.ExitPos == Board.Position.Right) {
+				GD.Print("Reached end and successful!!!");
+				BoardManager.LevelSuccess = true;
+			}
+			else {
+				GD.Print("Reached end and NOT successful");
+			}
+			BoardManager.LevelEnd = true;
+			EmitSignal("EndLevel");
+		}
+	}
+
+	private void OnEndLevel() {
+		GD.Print("Woop");
+		GetParent().GetNode<CanvasLayer>("HUD").EmitSignal("TriggerDialogue", BoardManager.CurLevel + "End");
 	}
 
 }

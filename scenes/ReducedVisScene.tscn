@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://cnaxxdqja5ot1"]
-
-[ext_resource type="PackedScene" uid="uid://borl80bjqe1m6" path="res://scenes/Board.tscn" id="1_mwaue"]
-[ext_resource type="Script" path="res://scripts/boards/ReducedVisBoard.cs" id="2_e543w"]
-
-[node name="ReducedVisScene" type="Node"]
-
-[node name="Board" parent="." instance=ExtResource("1_mwaue")]
-script = ExtResource("2_e543w")

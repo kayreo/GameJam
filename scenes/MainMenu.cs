@@ -9,9 +9,6 @@ public partial class MainMenu : Control
 
 	protected BoardManager BoardManager;
 
-	[Signal]
-	public delegate void ChangeLevelEventHandler(string WhichLevel);
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -21,7 +18,7 @@ public partial class MainMenu : Control
 
 		CreditButton = GetNode<TextureButton>("CreditsButton");
 
-		ChangeLevel += BoardManager.OnChangeLevel;
+		BoardManager.ChangeLevel += BoardManager.OnChangeLevel;
 		StartButton.Pressed += OnStartPressed;
 	}
 
@@ -31,6 +28,6 @@ public partial class MainMenu : Control
 	}
 
 	private void OnStartPressed() {
-		EmitSignal("ChangeLevel", "Level0");
+		BoardManager.EmitSignal("ChangeLevel", "Level0");
 	}
 }

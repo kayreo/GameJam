@@ -22,6 +22,8 @@ public partial class Icon : TextureRect
 
 	private BoardManager BoardManager;
 
+	private Board Board;
+
 	[Export]
 	public bool IsClicked = false;
 
@@ -30,13 +32,13 @@ public partial class Icon : TextureRect
 	private int MaxLifespan = 0;
 
 	[Export]
-	public BoardManager.Position EnterPos;
+	public Board.Position EnterPos;
 
 	[Export]
-	public BoardManager.Position ExitPos;
+	public Board.Position ExitPos;
 
 	[Export]
-	public BoardManager.Position TargetConnect;
+	public Board.Position TargetConnect;
 
 	public AnimatedSprite2D WireAnim;
 
@@ -50,12 +52,13 @@ public partial class Icon : TextureRect
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		Board = (Board)GetParent().GetParent().GetParent();
 		BoardManager = GetNode<BoardManager>("/root/BoardManager");
-		BoardManager.SetGridInfo += OnSetInfo;
-		BoardManager.ChangeGrid += OnChangeGrid;
+		Board.SetGridInfo += OnSetInfo;
+		Board.ChangeGrid += OnChangeGrid;
 		WireAnim = GetNode<AnimatedSprite2D>("WireAnim");
 		IsClicked = false;
-		ChangeActiveNode += BoardManager.OnChangeActiveNode;
+		ChangeActiveNode += Board.OnChangeActiveNode;
 		GetAdjacents();
 	}
 
@@ -83,7 +86,7 @@ public partial class Icon : TextureRect
 						if (TargetConnect == Exit.EnterPos || TargetConnect == Exit.ExitPos) {
 							GD.Print("Connecting");
 							if (TargetConnect == Exit.ExitPos) {
-								BoardManager.Position OriginalPos = Exit.EnterPos;
+								Board.Position OriginalPos = Exit.EnterPos;
 								Exit.EnterPos = Exit.ExitPos;
 								Exit.ExitPos = OriginalPos;
 								//GD.Print("Need to reverse");
@@ -113,40 +116,42 @@ public partial class Icon : TextureRect
 	}
 
 	private void _OnArea2DInputEvent(Node viewport, InputEvent @event, int shape_idx) {
-		if (WireAnim.Frame == 0 && !Locked) {
-			if (@event is InputEventMouseButton && @event.IsPressed()) {
-				var btn = @event as InputEventMouseButton;
-				if (btn.ButtonIndex == MouseButton.Left) {
-					GD.Print("Meow");
-					IsClicked = true;
-					BoardManager.ClickGridSection(this);
-				} else if (btn.ButtonIndex == MouseButton.Right) {
-					GD.Print("Rotating");
-					GetNode<Sprite2D>("Wire").RotationDegrees += 90;
-					GetNode<AnimatedSprite2D>("WireAnim").RotationDegrees += 90;
-					EnterPos += 1;
-					if ((int)EnterPos >= 4) {
-						EnterPos = BoardManager.Position.Left;
+		if (BoardManager.GameRunning) {
+			if (WireAnim.Frame == 0 && !Locked) {
+				if (@event is InputEventMouseButton && @event.IsPressed()) {
+					var btn = @event as InputEventMouseButton;
+					if (btn.ButtonIndex == MouseButton.Left) {
+					//	GD.Print("Meow");
+						IsClicked = true;
+						Board.ClickGridSection(this);
+					} else if (btn.ButtonIndex == MouseButton.Right) {
+						//GD.Print("Rotating");
+						GetNode<Sprite2D>("Wire").RotationDegrees += 90;
+						GetNode<AnimatedSprite2D>("WireAnim").RotationDegrees += 90;
+						EnterPos += 1;
+						if ((int)EnterPos >= 4) {
+							EnterPos = Board.Position.Left;
+						}
+						ExitPos += 1;
+						if ((int)ExitPos >= 4) {
+							ExitPos = Board.Position.Left;
+						}
+						TargetConnect += 1;
+						if ((int)TargetConnect >= 4) {
+							TargetConnect = Board.Position.Left;
+						}
+						//EnterPos = (EnterPos + 1) >= BoardManager.Position.Bottom ? EnterPos + 1 : 0;
+						//ExitPos = (ExitPos + 1) >= BoardManager.Position.Bottom ? ExitPos + 1 : 0;
+					//	GD.Print("New 1 2: ", EnterPos, " ", ExitPos);
+						//GD.Print("Target: ", TargetConnect);
 					}
-					ExitPos += 1;
-					if ((int)ExitPos >= 4) {
-						ExitPos = BoardManager.Position.Left;
-					}
-					TargetConnect += 1;
-					if ((int)TargetConnect >= 4) {
-						TargetConnect = BoardManager.Position.Left;
-					}
-					//EnterPos = (EnterPos + 1) >= BoardManager.Position.Bottom ? EnterPos + 1 : 0;
-					//ExitPos = (ExitPos + 1) >= BoardManager.Position.Bottom ? ExitPos + 1 : 0;
-					GD.Print("New 1 2: ", EnterPos, " ", ExitPos);
-					GD.Print("Target: ", TargetConnect);
 				}
 			}
 		}
 	} 
 
 	private void _OnArea2DMouseEntered() {
-		//GetNode<TextureRect>("SelectBorder").Show();
+		GetNode<TextureRect>("SelectBorder").Show();
 	}
 
 	private void _OnArea2DMouseExited() {
@@ -178,7 +183,7 @@ public partial class Icon : TextureRect
 			NodeToSwap.GetNode<AnimatedSprite2D>("WireAnim").RotationDegrees = OriginalRot;
 
 			// Enter Exit positions
-			BoardManager.Position OriginalPos = EnterPos;
+			Board.Position OriginalPos = EnterPos;
 			EnterPos = NodeToSwap.EnterPos;
 			NodeToSwap.EnterPos = OriginalPos;
 			OriginalPos = ExitPos;
@@ -215,14 +220,14 @@ public partial class Icon : TextureRect
 	private void OnSuccessEnter(Icon StartNode, bool reverse) {
 		if (reverse) {
 			StartNode.GetNode<AnimatedSprite2D>("WireAnim").Animation = StartNode.WireType + "R";
-			if (StartNode.ExitPos == BoardManager.Position.Bottom) {
-				StartNode.TargetConnect = BoardManager.Position.Top;
-			} else if (StartNode.ExitPos == BoardManager.Position.Top) {
-				StartNode.TargetConnect = BoardManager.Position.Bottom;
-			} else if (StartNode.ExitPos == BoardManager.Position.Left) {
-				StartNode.TargetConnect = BoardManager.Position.Right;
-			} else if (StartNode.ExitPos == BoardManager.Position.Right) {
-				StartNode.TargetConnect = BoardManager.Position.Left;
+			if (StartNode.ExitPos == Board.Position.Bottom) {
+				StartNode.TargetConnect = Board.Position.Top;
+			} else if (StartNode.ExitPos == Board.Position.Top) {
+				StartNode.TargetConnect = Board.Position.Bottom;
+			} else if (StartNode.ExitPos == Board.Position.Left) {
+				StartNode.TargetConnect = Board.Position.Right;
+			} else if (StartNode.ExitPos == Board.Position.Right) {
+				StartNode.TargetConnect = Board.Position.Left;
 			}
 			GD.Print("Reversed: ", StartNode.TargetConnect);
 		}
@@ -260,19 +265,19 @@ public partial class Icon : TextureRect
 		}
 
 		// GD.Print("Adjacents loaded for ", Name);
-		// Icon printName1 = (Icon)result[(int)BoardManager.Position.Left];
+		// Icon printName1 = (Icon)result[(int)Board.Position.Left];
 		// if (printName1 != null) {
 		// 	GD.Print("Left ", printName1.Name);
 		// }
-		// Icon printName2 = (Icon)result[(int)BoardManager.Position.Top];
+		// Icon printName2 = (Icon)result[(int)Board.Position.Top];
 		// if (printName2 != null) {
 		// 	GD.Print("Above, ", printName2.Name);
 		// }
-		// Icon printName3 = (Icon)result[(int)BoardManager.Position.Right];
+		// Icon printName3 = (Icon)result[(int)Board.Position.Right];
 		// if (printName3 != null) {
 		// 	GD.Print("Right, ", printName3.Name);
 		// }
-		// Icon printName4 = (Icon)result[(int)BoardManager.Position.Bottom];
+		// Icon printName4 = (Icon)result[(int)Board.Position.Bottom];
 		// if (printName4 != null) {
 		// 	GD.Print("Below, ", printName4.Name);
 		// }

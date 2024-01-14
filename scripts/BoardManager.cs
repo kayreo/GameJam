@@ -5,40 +5,12 @@ using System.Linq;
 
 public partial class BoardManager : Node
 {
-	public enum Position {
-		Left,
-		Top,
-		Right,
-		Bottom
-	}
-
-	// Index 0: Elbow, Index 1: Straight
-	// Sub Index 0: Entrance, Index 1: Exit
-	public Godot.Collections.Array<Godot.Collections.Array<Position>> WirePos = new Godot.Collections.Array<Godot.Collections.Array<Position>>();
-	private Node CurClick;
-	
-	private Node SwapClick;
-
-	private Icon ActiveIcon;
-
 	Godot.Collections.Array<Node> GridNodes;
 
 	Godot.Collections.Array<Node> Wires;
-
+	
 	[Signal]
-	public delegate void SetGridInfoEventHandler(string WhichNode, string TypeNam);
-
-	[Signal]
-	public delegate void ChangeGridEventHandler(string WhichNode, Icon NodeToSwap);
-
-	[Signal]
-	public delegate void ClickNodeEventHandler(Icon WhichNode);
-
-	[Signal]
-	public delegate void TriggerDialogueEventHandler(string DialogueText);
-
-	[Signal]
-	public delegate void EndLevelEventHandler();
+	public delegate void ChangeLevelEventHandler(string WhichLevel);
 
 	public bool DialogueActive = false;
 
@@ -48,31 +20,16 @@ public partial class BoardManager : Node
 
 	public bool LevelSuccess = false;
 
-	private string CurLevel;
+	public string CurLevel;
+
+	public int CurLevelIndex = 0;
+
+	public bool Muted = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		EndLevel += OnEndLevel;
-	}
-
-	public void OnSetData() {
-		GridNodes = GetTree().GetNodesInGroup("Grid");
-		Wires = GetTree().GetNodesInGroup("Wire");
-		Godot.Collections.Array<Position> ToAddPos = new Godot.Collections.Array<Position>();
-
-		// Elbow
-		ToAddPos.Add(Position.Left);
-		ToAddPos.Add(Position.Top);
-		WirePos.Add(ToAddPos);
-
-		// Straight
-		ToAddPos = new Godot.Collections.Array<Position>();
-		ToAddPos.Add(Position.Left);
-		ToAddPos.Add(Position.Right);
-		WirePos.Add(ToAddPos);
-
-		GD.Print("Wire positions: ", WirePos);
+		
 	}
 
 	/*     var vec = get_viewport().get_mouse_position() - self.position # getting the vector from self to the mouse
@@ -87,56 +44,33 @@ public partial class BoardManager : Node
 
 	}
 
-	public void ClickGridSection(Node Who) {
-		GD.Print("Clicked ", Who.Name);
-		int GetIndex;
-		if (CurClick == null) {
-			GD.Print("First click");
-			GetIndex = GridNodes.IndexOf(Who);
-			EmitSignal("ClickNode", (Icon)Who);
-			CurClick = GridNodes[GetIndex];
-		} else {
-			GD.Print("Second click");
-			GetIndex = GridNodes.IndexOf(Who);
-			SwapClick = GridNodes[GetIndex];
-			EmitSignal("ChangeGrid", CurClick.Name, (Icon)SwapClick);
-			CurClick = null;
-			SwapClick = null;
-			EmitSignal("TriggerDialogue", "Level0");
-		}
-	}
-
-	public void OnChangeActiveNode(Icon WhichNode) {
-		GD.Print("Active Node!", WhichNode.Name);
-		ActiveIcon = WhichNode;
-		if (GridNodes.IndexOf((Node)ActiveIcon) == GridNodes.Count - 1) {
-			if (ActiveIcon.ExitPos == Position.Right) {
-				GD.Print("Reached end and successful!!!");
-				LevelSuccess = true;
-			}
-			else {
-				GD.Print("Reached end and NOT successful");
-			}
-			LevelEnd = true;
-			EmitSignal("EndLevel");
-		}
-	}
-
-	private void OnEndLevel() {
-		GD.Print("Woop");
-		EmitSignal("TriggerDialogue", CurLevel + "End");
-	}
 
 	public void OnChangeLevel(string WhichLevel) {
-		GD.Print(WhichLevel);
-		CurLevel = WhichLevel;
+		GD.Print("Entering ", WhichLevel);
 		string PathToLevel = "res://scenes/levels/" + WhichLevel + ".tscn";
+		//var scene = GD.Load<PackedScene>(PathToLevel);
+		//var instance = scene.Instantiate();
+	
+		//GetParent().GetNode<Node>("Game").AddChild(instance);
 		GetTree().ChangeSceneToFile(PathToLevel);
+	}
+
+	public void OnFirstEndDialogue() {
+		GD.Print("Dialogue over");
+		DialogueActive = false;
+		GameRunning = true;
 	}
 
 	public void OnEndDialogue() {
 		GD.Print("Dialogue over");
 		DialogueActive = false;
+		GameRunning = false;
+		CurLevelIndex++;
+		if (CurLevelIndex == 2) {
+			EmitSignal("ChangeLevel", "WinScreen");
+		} else {
+			EmitSignal("ChangeLevel", "Level" + CurLevelIndex);
+		}
 	}
 
 	public void OnHelpPressed() {
@@ -146,5 +80,7 @@ public partial class BoardManager : Node
 	public void OnPausePressed() {
 		GD.Print("Pause Pressed");
 	}
+
+
 
 }

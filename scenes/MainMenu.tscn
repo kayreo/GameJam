@@ -41,6 +41,7 @@ texture_hover = ExtResource("4_fe17b")
 
 [node name="CreditsButton" type="TextureButton" parent="."]
 texture_filter = 1
+layout_mode = 0
 offset_left = 406.0
 offset_top = 236.0
 offset_right = 588.0
