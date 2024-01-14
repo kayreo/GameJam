@@ -11,11 +11,17 @@ public partial class Board : Node
 
 	protected Godot.Collections.Array<Node> Wires;
 
+	[Signal]
+	public delegate void SetDataEventHandler();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		BoardManager = GetNode<BoardManager>("/root/BoardManager");
 		BoardManager.ClickNode += OnClickNode;
+		SetData += BoardManager.OnSetData;
+		EmitSignal("SetData");
+
 		GridNodes = GetTree().GetNodesInGroup("Grid");
 		Wires = GetTree().GetNodesInGroup("Wire");
 

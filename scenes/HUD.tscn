@@ -1,46 +1,127 @@
-[gd_scene load_steps=7 format=3 uid="uid://5mrey0fomfps"]
+[gd_scene load_steps=19 format=3 uid="uid://5mrey0fomfps"]
 
 [ext_resource type="Script" path="res://scenes/HUD.cs" id="1_2ed7c"]
-[ext_resource type="Texture2D" uid="uid://b2ppe6rljsgoq" path="res://sprites/HUD/Border.png" id="1_ac2h0"]
-[ext_resource type="Texture2D" uid="uid://drwdnecokg6gq" path="res://sprites/HUD/Sidebars.png" id="2_k5nrr"]
-[ext_resource type="Texture2D" uid="uid://bqi51bxmlpbtj" path="res://sprites/HUD/DialogueBox.png" id="3_ppblo"]
-[ext_resource type="Texture2D" uid="uid://b38k4fx6niaky" path="res://sprites/HUD/SubMenu.png" id="4_j4ks6"]
+[ext_resource type="Texture2D" uid="uid://mfiqnjx8sn0s" path="res://sprites/bg.png" id="2_h0afa"]
+[ext_resource type="Texture2D" uid="uid://cdquub575ola5" path="res://sprites/houses.png" id="3_iww7n"]
 [ext_resource type="SpriteFrames" uid="uid://cr1ojcdoiv4rc" path="res://scenes/Portraits.tres" id="5_oyuky"]
+[ext_resource type="FontFile" uid="uid://bsty1oq2gqts1" path="res://fonts/pixel.ttf" id="6_r8up1"]
+[ext_resource type="Texture2D" uid="uid://30sx3810sf65" path="res://sprites/HUD/SubMenuMusic.png" id="7_fv1y4"]
+[ext_resource type="Texture2D" uid="uid://odauxcbtqspy" path="res://sprites/phones.png" id="7_rvn1m"]
+[ext_resource type="AudioStream" uid="uid://cmckliegbliph" path="res://music/JamTheme.mp3" id="7_vm2he"]
+[ext_resource type="Texture2D" uid="uid://cd6hhje4e0h6o" path="res://sprites/HUD/SubMenuHelp.png" id="8_jxfff"]
+[ext_resource type="Texture2D" uid="uid://6nponqy8htt0" path="res://sprites/HUD/SubMenuPause.png" id="9_i5n7v"]
+[ext_resource type="Texture2D" uid="uid://fqfdj7r2fnb7" path="res://sprites/HUD/Win.png" id="10_8ws2s"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f13su"]
+atlas = ExtResource("3_iww7n")
+region = Rect2(0, 0, 70, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_osu3o"]
+atlas = ExtResource("3_iww7n")
+region = Rect2(70, 0, 70, 148)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2m1h"]
+atlas = ExtResource("3_iww7n")
+region = Rect2(140, 0, 70, 148)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cmxgt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f13su")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_osu3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2m1h")
+}],
+"loop": true,
+"name": &"Houses",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ifhwb"]
+atlas = ExtResource("7_rvn1m")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7k6pg"]
+atlas = ExtResource("7_rvn1m")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_miqa3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ifhwb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7k6pg")
+}],
+"loop": true,
+"name": &"Phone",
+"speed": 5.0
+}]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_2ed7c")
+CurSpeaker1 = "1"
 
 [node name="Border" type="TextureRect" parent="."]
 texture_filter = 1
-offset_right = 640.0
-offset_bottom = 428.0
-texture = ExtResource("1_ac2h0")
+custom_minimum_size = Vector2(768, 432)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -384.0
+offset_top = -216.0
+offset_right = 384.0
+offset_bottom = 216.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_h0afa")
 
-[node name="Sidebar" type="TextureRect" parent="."]
+[node name="Sidebar" type="AnimatedSprite2D" parent="Border"]
 texture_filter = 1
-offset_left = 18.0
-offset_top = 6.0
-offset_right = 156.0
-offset_bottom = 412.0
-texture = ExtResource("2_k5nrr")
+position = Vector2(153, 286.454)
+scale = Vector2(1.97143, 1.96684)
+sprite_frames = SubResource("SpriteFrames_cmxgt")
+animation = &"Houses"
+
+[node name="Phone" type="AnimatedSprite2D" parent="Border"]
+texture_filter = 1
+position = Vector2(616, 354)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_miqa3")
+animation = &"Phone"
 
 [node name="DialogueBox" type="TextureRect" parent="."]
 texture_filter = 1
-offset_left = 156.0
-offset_top = 330.0
-offset_right = 480.0
-offset_bottom = 412.0
-texture = ExtResource("3_ppblo")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -158.0
+offset_top = 130.0
+offset_right = 158.0
+offset_bottom = 214.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Speaker0" type="AnimatedSprite2D" parent="DialogueBox"]
 texture_filter = 1
-position = Vector2(46, 42)
+position = Vector2(42, 42)
+scale = Vector2(2, 2)
 sprite_frames = ExtResource("5_oyuky")
 animation = &"player0"
 
 [node name="Speaker1" type="AnimatedSprite2D" parent="DialogueBox"]
 texture_filter = 1
-position = Vector2(278, 42)
+position = Vector2(274, 42)
+scale = Vector2(2, 2)
 sprite_frames = ExtResource("5_oyuky")
 animation = &"player1"
 
@@ -51,35 +132,69 @@ offset_left = 90.0
 offset_top = 4.0
 offset_right = 234.0
 offset_bottom = 80.0
-theme_override_font_sizes/normal_font_size = 15
-text = "Meow Meow Meow Meow  Meow Meow  Meow"
+theme_override_constants/line_separation = 5
+theme_override_fonts/normal_font = ExtResource("6_r8up1")
+theme_override_font_sizes/normal_font_size = 13
+text = "Meow Meow Meow Meow  Meow Meow  Meow meow "
+fit_content = true
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_vm2he")
 
 [node name="SubMenu" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MusicButton" type="TextureButton" parent="SubMenu"]
 texture_filter = 1
-offset_left = 480.0
-offset_top = 6.0
-offset_right = 618.0
-offset_bottom = 412.0
-texture = ExtResource("4_j4ks6")
+layout_mode = 0
+offset_left = 188.0
+offset_top = -166.0
+offset_right = 203.0
+offset_bottom = -151.0
+scale = Vector2(2, 2)
+texture_normal = ExtResource("7_fv1y4")
 
-[node name="MusicButton" type="Button" parent="SubMenu"]
-offset_left = 8.0
-offset_top = 7.0
-offset_right = 38.0
-offset_bottom = 38.0
-text = "M
-"
+[node name="HelpButton" type="TextureButton" parent="SubMenu"]
+texture_filter = 1
+offset_left = 222.0
+offset_top = -166.0
+offset_right = 237.0
+offset_bottom = -151.0
+scale = Vector2(2, 2)
+texture_normal = ExtResource("8_jxfff")
 
-[node name="HelpButton" type="Button" parent="SubMenu"]
-offset_left = 42.0
-offset_top = 7.0
-offset_right = 72.0
-offset_bottom = 38.0
-text = "H"
+[node name="PauseButton" type="TextureButton" parent="SubMenu"]
+texture_filter = 1
+offset_left = 256.0
+offset_top = -166.0
+offset_right = 271.0
+offset_bottom = -151.0
+scale = Vector2(2, 2)
+texture_normal = ExtResource("9_i5n7v")
 
-[node name="PauseButton" type="Button" parent="SubMenu"]
-offset_left = 76.0
-offset_top = 7.0
-offset_right = 106.0
-offset_bottom = 38.0
-text = "P"
+[node name="Win" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -162.0
+offset_top = -113.0
+offset_right = -1.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+texture = ExtResource("10_8ws2s")

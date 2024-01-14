@@ -62,36 +62,38 @@ public partial class Icon : TextureRect
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Name == "0") {
-			//GD.Print(WireAnim.Frame);
-		}
-		if (WireFilling) { 
-			if (WireAnim.Frame == MaxLifespan) {
-					WireFilling = false;
-					WireAnim.SpeedScale = 0;
-					// get exit position grid
-					Icon Exit = (Icon)Adj[(int)ExitPos];
-					if (Exit != null) {
-					Exit.Locked = true;
-					// GD.Print("Exiting into: ", Exit.Name);
-					// GD.Print("Targeting: ", TargetConnect);
-					// GD.Print("Entering from: ", Exit.EnterPos);
-					// GD.Print("Or: ", Exit.ExitPos);
-					bool reverse = false;
-					// Can enter from Left, Right, Top, Bottom
-					if (TargetConnect == Exit.EnterPos || TargetConnect == Exit.ExitPos) {
-						//GD.Print("Connecting");
-						if (TargetConnect == Exit.ExitPos) {
-							BoardManager.Position OriginalPos = Exit.EnterPos;
-							Exit.EnterPos = Exit.ExitPos;
-							Exit.ExitPos = OriginalPos;
-							//GD.Print("Need to reverse");
-							reverse = true;
+		if (BoardManager.GameRunning) {
+			if (Name == "0") {
+				//GD.Print(WireAnim.Frame);
+			}
+			if (WireFilling) { 
+				if (WireAnim.Frame == MaxLifespan) {
+						WireFilling = false;
+						WireAnim.SpeedScale = 0;
+						// get exit position grid
+						Icon Exit = (Icon)Adj[(int)ExitPos];
+						if (Exit != null) {
+						Exit.Locked = true;
+						// GD.Print("Exiting into: ", Exit.Name);
+						// GD.Print("Targeting: ", TargetConnect);
+						// GD.Print("Entering from: ", Exit.EnterPos);
+						// GD.Print("Or: ", Exit.ExitPos);
+						bool reverse = false;
+						// Can enter from Left, Right, Top, Bottom
+						if (TargetConnect == Exit.EnterPos || TargetConnect == Exit.ExitPos) {
+							GD.Print("Connecting");
+							if (TargetConnect == Exit.ExitPos) {
+								BoardManager.Position OriginalPos = Exit.EnterPos;
+								Exit.EnterPos = Exit.ExitPos;
+								Exit.ExitPos = OriginalPos;
+								//GD.Print("Need to reverse");
+								reverse = true;
+							}
+							OnSuccessEnter(Exit, reverse);
 						}
-						OnSuccessEnter(Exit, reverse);
+					} else {
+						GD.Print("Game over");
 					}
-				} else {
-					GD.Print("Game over");
 				}
 			}
 		}
@@ -103,9 +105,9 @@ public partial class Icon : TextureRect
 			//GD.Print("Setting type to: ", TypeName);
 			WireType = TypeName;
 			if (WireType.Contains("Loop")) {
-				MaxLifespan = 9;
+				MaxLifespan = 8;
 			} else {
-				MaxLifespan = 5;
+				MaxLifespan = 4;
 			}
 		}
 	}

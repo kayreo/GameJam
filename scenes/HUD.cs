@@ -9,7 +9,9 @@ public partial class HUD : CanvasLayer
 
 	private TextureRect DialogueBox;
 
-	private TextureRect Sidebar;
+	private AnimatedSprite2D Sidebar;
+
+	private AnimatedSprite2D Phone;
 
 	private Json jsonLoader;
 
@@ -25,31 +27,52 @@ public partial class HUD : CanvasLayer
 
 	private AnimatedSprite2D Speaker1;
 
+	private TextureButton MusicButton;
+
+	private TextureButton HelpButton;
+
+	private TextureButton PauseButton;
+
+	private AudioStreamPlayer MusicPlayer;
+
 	[Export]
 	public string CurSpeaker0 = "0";
 
 	[Export]
 	public string CurSpeaker1 = "0";
 
-	private bool DialogueActive = false;
-
 	private bool InProgress = false;
 
 	private int CurrentLineIndex = 0;
+
+	[Signal]
+	public delegate void EndDialogueEventHandler();
 
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		BoardManager = GetNode<BoardManager>("/root/BoardManager");
-
+		EndDialogue += BoardManager.OnEndDialogue;
 		SubMenu = GetNode<TextureRect>("SubMenu");
 		DialogueBox = GetNode<TextureRect>("DialogueBox");
-		Sidebar = GetNode<TextureRect>("Sidebar");
+		Sidebar = GetNode<AnimatedSprite2D>("Border/Sidebar");
+		Phone = GetNode<AnimatedSprite2D>("Border/Phone");
 		foreach (Node n in SubMenu.GetChildren()) {
-			Button b = (Button)n;
+			TextureButton b = (TextureButton)n;
 			GD.Print("Button: ", b.Name);
 		}
+
+		MusicButton = SubMenu.GetNode<TextureButton>("MusicButton");
+		MusicButton.Pressed += OnMusicPressed;
+
+		HelpButton = SubMenu.GetNode<TextureButton>("HelpButton");
+		HelpButton.Pressed += BoardManager.OnHelpPressed;
+
+		PauseButton = SubMenu.GetNode<TextureButton>("PauseButton");
+		PauseButton.Pressed += BoardManager.OnPausePressed;
+
+		MusicPlayer = GetNode<AudioStreamPlayer>("Music");
 
 		jsonLoader = new Json();
 
@@ -71,32 +94,33 @@ public partial class HUD : CanvasLayer
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (DialogueActive) {
+		if (BoardManager.DialogueActive) {
 			Dialogue.Show();
-			// Printing out a line
-			// if (InProgress) {
-			// 	// scroll text
-			// 	if (Dialogue.VisibleCharacters < Dialogue.Text.Length) {
-			// 		Dialogue.VisibleCharacters += 1;
-			// 		if (Input.IsActionJustReleased("click")) {
-			// 			Dialogue.VisibleCharacters = -1;
-			// 			InProgress = false;
-			// 		}
-			// 	} 
-			// 	// text done scrolling, set visible chars to all
-			// 	else if (Dialogue.VisibleCharacters >= Dialogue.Text.Length) {
-			// 		Dialogue.VisibleCharacters = -1;
-			// 		InProgress = false;
-			// 	}
-			// }
-			// Move to next line
-			//else {
+			//Printing out a line
+			if (InProgress) {
+				// scroll text
+				if (Dialogue.VisibleCharacters < Dialogue.Text.Length) {
+					Dialogue.VisibleCharacters += 1;
+					if (Input.IsActionJustReleased("click")) {
+						Dialogue.VisibleCharacters = -1;
+						InProgress = false;
+					}
+				} 
+				// text done scrolling, set visible chars to all
+				else if (Dialogue.VisibleCharacters >= Dialogue.Text.Length) {
+					Dialogue.VisibleCharacters = -1;
+					InProgress = false;
+				}
+			}
+			//Move to next line
+			else {
 				if (Input.IsActionJustReleased("click")) {
 					ContinueDialogue();
 				}
-			//}
+			}
 		} else {
 			Dialogue.Hide();
+			CurrentLineIndex = 0;
 			Speaker0.Frame = 0;
 			Speaker1.Frame = 0;
 		}
@@ -106,8 +130,9 @@ public partial class HUD : CanvasLayer
 	// Loads secnario to be printed
 	// DialogueLine parameter is the group of lines to grab from the JSON file
 	private void OnDialogueTrigger(string Scenario) {
+		GD.Print("Received signal");
 		DialogueData = (Godot.Collections.Dictionary)DialogueScenarios[Scenario];
-		DialogueActive = true;
+		BoardManager.DialogueActive = true;
 		ContinueDialogue();
 	}
 
@@ -132,7 +157,8 @@ public partial class HUD : CanvasLayer
 			// GD.Print("Total: ", DialogueBox.Text.Length);
 		} else {
 			// key not found, stop dialogue
-			DialogueActive = false;
+			BoardManager.DialogueActive = false;
+			EmitSignal("EndDialogue");
 		}
 	}
 
@@ -141,5 +167,10 @@ public partial class HUD : CanvasLayer
 	private void ChangePortrait(Vector2I WhichPortrait) {
 		GD.Print("Chef");
 		GetNode<TileMap>("PortraitControl/Portrait").SetCell(0, new Vector2I(0,0), 0, WhichPortrait);
+	}
+
+	public void OnMusicPressed() {
+		GD.Print("Music pressed");
+		MusicPlayer.Playing = !MusicPlayer.Playing;
 	}
 }

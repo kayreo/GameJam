@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckku3fj26dsra"]
+
+[ext_resource type="PackedScene" uid="uid://cnaxxdqja5ot1" path="res://scenes/ReducedVisScene.tscn" id="1_11x5x"]
+[ext_resource type="PackedScene" uid="uid://5mrey0fomfps" path="res://scenes/HUD.tscn" id="2_n7vh8"]
+
+[node name="Level2" type="Node"]
+
+[node name="ReducedVisScene" parent="." instance=ExtResource("1_11x5x")]
+
+[node name="HUD" parent="." instance=ExtResource("2_n7vh8")]
+CurSpeaker0 = "2"
+CurSpeaker1 = "3"

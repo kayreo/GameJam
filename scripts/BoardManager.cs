@@ -37,14 +37,26 @@ public partial class BoardManager : Node
 	[Signal]
 	public delegate void TriggerDialogueEventHandler(string DialogueText);
 
+	[Signal]
+	public delegate void EndLevelEventHandler();
+
+	public bool DialogueActive = false;
+
+	public bool GameRunning = false;
+
 	public bool LevelEnd = false;
 
 	public bool LevelSuccess = false;
 
+	private string CurLevel;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		EndLevel += OnEndLevel;
+	}
+
+	public void OnSetData() {
 		GridNodes = GetTree().GetNodesInGroup("Grid");
 		Wires = GetTree().GetNodesInGroup("Wire");
 		Godot.Collections.Array<Position> ToAddPos = new Godot.Collections.Array<Position>();
@@ -90,6 +102,7 @@ public partial class BoardManager : Node
 			EmitSignal("ChangeGrid", CurClick.Name, (Icon)SwapClick);
 			CurClick = null;
 			SwapClick = null;
+			EmitSignal("TriggerDialogue", "Level0");
 		}
 	}
 
@@ -105,7 +118,33 @@ public partial class BoardManager : Node
 				GD.Print("Reached end and NOT successful");
 			}
 			LevelEnd = true;
+			EmitSignal("EndLevel");
 		}
+	}
+
+	private void OnEndLevel() {
+		GD.Print("Woop");
+		EmitSignal("TriggerDialogue", CurLevel + "End");
+	}
+
+	public void OnChangeLevel(string WhichLevel) {
+		GD.Print(WhichLevel);
+		CurLevel = WhichLevel;
+		string PathToLevel = "res://scenes/levels/" + WhichLevel + ".tscn";
+		GetTree().ChangeSceneToFile(PathToLevel);
+	}
+
+	public void OnEndDialogue() {
+		GD.Print("Dialogue over");
+		DialogueActive = false;
+	}
+
+	public void OnHelpPressed() {
+		GD.Print("Help pressed");
+	}
+
+	public void OnPausePressed() {
+		GD.Print("Pause Pressed");
 	}
 
 }

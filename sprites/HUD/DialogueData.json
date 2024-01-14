@@ -12,5 +12,15 @@
 			"01", "11",
 			"Neigh neigh neigh neigh"
 		]
+	},
+	"Level0End": {
+		"0": [
+			"01", "11",
+			"You did it yay"
+		],
+		"1": [
+			"01", "11",
+			"Woof woof woof woof"
+		]
 	}
 }
