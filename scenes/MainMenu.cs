@@ -13,6 +13,7 @@ public partial class MainMenu : Control
 	public override void _Ready()
 	{
 		BoardManager = GetNode<BoardManager>("/root/BoardManager");
+		BoardManager.CurLevelIndex = 0;
 
 		StartButton = GetNode<TextureButton>("PlayButton");
 
@@ -20,6 +21,8 @@ public partial class MainMenu : Control
 
 		BoardManager.ChangeLevel += BoardManager.OnChangeLevel;
 		StartButton.Pressed += OnStartPressed;
+
+		CreditButton.Pressed += OnCreditsPressed;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,6 +31,11 @@ public partial class MainMenu : Control
 	}
 
 	private void OnStartPressed() {
+		BoardManager.CurLevel = "Level0";
 		BoardManager.EmitSignal("ChangeLevel", "Level0");
+	}
+
+	private void OnCreditsPressed() {
+		GetTree().ChangeSceneToFile("res://scenes/Credits.tscn");
 	}
 }

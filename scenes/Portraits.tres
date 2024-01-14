@@ -1,6 +1,10 @@
-[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://cr1ojcdoiv4rc"]
+[gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://cr1ojcdoiv4rc"]
 
 [ext_resource type="Texture2D" uid="uid://0w35h7et7ge3" path="res://sprites/HUD/Portraits.png" id="1_4aesd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i15x5"]
+atlas = ExtResource("1_4aesd")
+region = Rect2(80, 82, 38, 39)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dwcc3"]
 atlas = ExtResource("1_4aesd")
@@ -44,6 +48,14 @@ region = Rect2(40, 120, 38, 38)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i15x5")
+}],
+"loop": true,
+"name": &"none",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dwcc3")

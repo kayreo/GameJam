@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://csphvf6dvvnx5"]
+
+[ext_resource type="Script" path="res://scenes/Navigation.cs" id="1_5fcji"]
+[ext_resource type="Texture2D" uid="uid://bj4w2me031ws4" path="res://sprites/creditsbglayout1.png" id="1_f81oa"]
+[ext_resource type="FontFile" uid="uid://bsty1oq2gqts1" path="res://fonts/pixel.ttf" id="2_wci7u"]
+[ext_resource type="Texture2D" uid="uid://c12r28ldlkwj8" path="res://sprites/HUD/backbutton.png" id="4_ds2yv"]
+[ext_resource type="Texture2D" uid="uid://b5dqjw0c34r3p" path="res://sprites/HUD/backbutton1.png" id="5_1rkk7"]
+
+[node name="Credits" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+script = ExtResource("1_5fcji")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = -384.0
+offset_top = -216.0
+scale = Vector2(2, 2)
+texture = ExtResource("1_f81oa")
+
+[node name="Label" type="Label" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = -58.0
+offset_top = -162.0
+offset_right = 26.0
+offset_bottom = -108.0
+theme_override_fonts/font = ExtResource("2_wci7u")
+text = "Kayla
+
+Coding"
+
+[node name="Label2" type="Label" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = -58.0
+offset_top = -65.0
+offset_right = 77.0
+offset_bottom = -11.0
+theme_override_fonts/font = ExtResource("2_wci7u")
+text = "Amanda
+
+Art + Music"
+
+[node name="BackButton" type="TextureButton" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = -90.0
+offset_top = 27.0
+offset_right = 1.0
+offset_bottom = 76.0
+scale = Vector2(2, 2)
+texture_normal = ExtResource("4_ds2yv")
+texture_hover = ExtResource("5_1rkk7")

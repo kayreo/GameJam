@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnaxxdqja5ot1"]
+[gd_scene load_steps=5 format=3 uid="uid://cnaxxdqja5ot1"]
 
 [ext_resource type="PackedScene" uid="uid://borl80bjqe1m6" path="res://scenes/Board.tscn" id="1_2x1o2"]
 [ext_resource type="PackedScene" uid="uid://5mrey0fomfps" path="res://scenes/HUD.tscn" id="2_n7vh8"]
 [ext_resource type="Script" path="res://scripts/boards/ReducedVisBoard.cs" id="2_xn444"]
+[ext_resource type="PackedScene" uid="uid://cvk880vvfxl25" path="res://scenes/GameOver.tscn" id="4_bchlm"]
 
 [node name="ReducedVisScene" type="Node"]
 
@@ -10,3 +11,7 @@
 script = ExtResource("2_xn444")
 
 [node name="HUD" parent="." instance=ExtResource("2_n7vh8")]
+CurSpeaker0 = "2"
+CurSpeaker1 = "3"
+
+[node name="GameOver" parent="." instance=ExtResource("4_bchlm")]

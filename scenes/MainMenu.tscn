@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1cnhdp1wmysl"]
+[gd_scene load_steps=8 format=3 uid="uid://d1cnhdp1wmysl"]
 
 [ext_resource type="Script" path="res://scenes/MainMenu.cs" id="1_uixcj"]
 [ext_resource type="Texture2D" uid="uid://bqhie02bpqha7" path="res://sprites/HUD/MainMenu.png" id="1_w5nj5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dem7quj6vf26y" path="res://sprites/HUD/MainMenuPlayButton1.png" id="4_fe17b"]
 [ext_resource type="Texture2D" uid="uid://b8iopgtqghiv7" path="res://sprites/HUD/MainMenuCreditButton.png" id="4_jop24"]
 [ext_resource type="Texture2D" uid="uid://d13x6wbb7y0xq" path="res://sprites/HUD/MainMenuCreditButton1.png" id="5_2p8ga"]
+[ext_resource type="AudioStream" uid="uid://cmckliegbliph" path="res://music/JamTheme.mp3" id="7_cordr"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -14,12 +15,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -384.0
-offset_top = -217.0
-offset_right = -384.0
-offset_bottom = -217.0
+offset_left = -769.0
+offset_top = -432.0
+offset_right = -769.0
+offset_bottom = -432.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
 script = ExtResource("1_uixcj")
 
 [node name="BG" type="TextureRect" parent="."]
@@ -48,3 +50,7 @@ offset_right = 588.0
 offset_bottom = 334.0
 texture_normal = ExtResource("4_jop24")
 texture_hover = ExtResource("5_2p8ga")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_cordr")
+autoplay = true

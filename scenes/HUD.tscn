@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://5mrey0fomfps"]
+[gd_scene load_steps=21 format=3 uid="uid://5mrey0fomfps"]
 
 [ext_resource type="Script" path="res://scenes/HUD.cs" id="1_2ed7c"]
 [ext_resource type="Texture2D" uid="uid://mfiqnjx8sn0s" path="res://sprites/bg.png" id="2_h0afa"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://cd6hhje4e0h6o" path="res://sprites/HUD/SubMenuHelp.png" id="8_jxfff"]
 [ext_resource type="Texture2D" uid="uid://6nponqy8htt0" path="res://sprites/HUD/SubMenuPause.png" id="9_i5n7v"]
 [ext_resource type="Texture2D" uid="uid://fqfdj7r2fnb7" path="res://sprites/HUD/Win.png" id="10_8ws2s"]
+[ext_resource type="Texture2D" uid="uid://d4lbrjth41l67" path="res://sprites/HUD/Help.png" id="12_b2dk2"]
+[ext_resource type="AudioStream" uid="uid://jq52cbctsb5h" path="res://music/win.mp3" id="13_i4icb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f13su"]
 atlas = ExtResource("3_iww7n")
@@ -64,23 +66,23 @@ animations = [{
 }]
 
 [node name="HUD" type="CanvasLayer"]
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
 script = ExtResource("1_2ed7c")
 CurSpeaker1 = "1"
 
 [node name="Border" type="TextureRect" parent="."]
 texture_filter = 1
 custom_minimum_size = Vector2(768, 432)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.25
+anchor_bottom = 0.25
 offset_left = -384.0
 offset_top = -216.0
 offset_right = 384.0
 offset_bottom = 216.0
-grow_horizontal = 2
-grow_vertical = 2
 texture = ExtResource("2_h0afa")
 
 [node name="Sidebar" type="AnimatedSprite2D" parent="Border"]
@@ -99,15 +101,15 @@ animation = &"Phone"
 
 [node name="DialogueBox" type="TextureRect" parent="."]
 texture_filter = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.248
+anchor_right = 0.25
+anchor_bottom = 0.248
 offset_left = -158.0
-offset_top = 130.0
+offset_top = 132.228
 offset_right = 158.0
-offset_bottom = 214.0
+offset_bottom = 216.228
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -116,14 +118,14 @@ texture_filter = 1
 position = Vector2(42, 42)
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("5_oyuky")
-animation = &"player0"
+animation = &"none"
 
 [node name="Speaker1" type="AnimatedSprite2D" parent="DialogueBox"]
 texture_filter = 1
 position = Vector2(274, 42)
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("5_oyuky")
-animation = &"player1"
+animation = &"player3"
 
 [node name="Dialogue" type="RichTextLabel" parent="DialogueBox"]
 texture_filter = 1
@@ -134,19 +136,94 @@ offset_right = 234.0
 offset_bottom = 80.0
 theme_override_constants/line_separation = 5
 theme_override_fonts/normal_font = ExtResource("6_r8up1")
-theme_override_font_sizes/normal_font_size = 13
+theme_override_font_sizes/normal_font_size = 10
 text = "Meow Meow Meow Meow  Meow Meow  Meow meow "
 fit_content = true
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_vm2he")
 
-[node name="SubMenu" type="TextureRect" parent="."]
+[node name="HelpWindow" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.25
+anchor_bottom = 0.25
+offset_left = -384.0
+offset_top = -216.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+texture = ExtResource("12_b2dk2")
+
+[node name="Label2" type="Label" parent="HelpWindow"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -146.25
+offset_top = -25.25
+offset_right = -39.25
+offset_bottom = 23.75
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_r8up1")
+theme_override_font_sizes/font_size = 10
+text = "Connect the wires to the other side!"
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="HelpWindow"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 57.25
+offset_top = -58.25
+offset_right = 164.25
+offset_bottom = -9.25
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.55, 0.55)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_r8up1")
+theme_override_font_sizes/font_size = 10
+text = "Left-click to pick a tile! Click another tile to swap!"
+autowrap_mode = 2
+
+[node name="Label3" type="Label" parent="HelpWindow"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 99.5
+offset_top = 2.5
+offset_right = 183.5
+offset_bottom = 64.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_r8up1")
+theme_override_font_sizes/font_size = 10
+text = "Right click a tile to rotate it!"
+autowrap_mode = 2
+
+[node name="SubMenu" type="TextureRect" parent="."]
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.25
+anchor_bottom = 0.25
 offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
@@ -200,3 +277,6 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
 texture = ExtResource("10_8ws2s")
+
+[node name="WinJingle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_i4icb")

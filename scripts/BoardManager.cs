@@ -46,6 +46,7 @@ public partial class BoardManager : Node
 
 
 	public void OnChangeLevel(string WhichLevel) {
+		CurLevel = WhichLevel;
 		GD.Print("Entering ", WhichLevel);
 		string PathToLevel = "res://scenes/levels/" + WhichLevel + ".tscn";
 		//var scene = GD.Load<PackedScene>(PathToLevel);
@@ -66,19 +67,11 @@ public partial class BoardManager : Node
 		DialogueActive = false;
 		GameRunning = false;
 		CurLevelIndex++;
-		if (CurLevelIndex == 2) {
+		if (CurLevelIndex >= 3) {
 			EmitSignal("ChangeLevel", "WinScreen");
 		} else {
 			EmitSignal("ChangeLevel", "Level" + CurLevelIndex);
 		}
-	}
-
-	public void OnHelpPressed() {
-		GD.Print("Help pressed");
-	}
-
-	public void OnPausePressed() {
-		GD.Print("Pause Pressed");
 	}
 
 

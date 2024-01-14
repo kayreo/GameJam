@@ -11,7 +11,8 @@ public partial class HUD : CanvasLayer
 
 	private AnimatedSprite2D Sidebar;
 
-	private AnimatedSprite2D Phone;
+	[Export]
+	public AnimatedSprite2D Phone;
 
 	private Json jsonLoader;
 
@@ -61,7 +62,6 @@ public partial class HUD : CanvasLayer
 	[Signal]
 	public delegate void StartGameEventHandler();
 
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -74,31 +74,31 @@ public partial class HUD : CanvasLayer
 		Phone = GetNode<AnimatedSprite2D>("Border/Phone");
 		foreach (Node n in SubMenu.GetChildren()) {
 			TextureButton b = (TextureButton)n;
-			GD.Print("Button: ", b.Name);
+			//GD.Print("Button: ", b.Name);
 		}
 
 		MusicButton = SubMenu.GetNode<TextureButton>("MusicButton");
 		MusicButton.Pressed += OnMusicPressed;
 
 		HelpButton = SubMenu.GetNode<TextureButton>("HelpButton");
-		HelpButton.Pressed += BoardManager.OnHelpPressed;
+		HelpButton.Pressed += OnHelpPressed;
 
 		PauseButton = SubMenu.GetNode<TextureButton>("PauseButton");
-		PauseButton.Pressed += BoardManager.OnPausePressed;
+		PauseButton.Pressed += OnPausePressed;
 
 		MusicPlayer = GetNode<AudioStreamPlayer>("Music");
 
 		jsonLoader = new Json();
-
-		jsonLoader.Parse(File.ReadAllText("sprites/HUD/DialogueData.json"));
+		var file = File.ReadAllText("dialoguedata.json");
+		jsonLoader.Parse(file);
 		DialogueScenarios = (Godot.Collections.Dictionary)jsonLoader.Data;
 
-		GD.Print("Scenarios: ", DialogueScenarios);
+		//GD.Print("Scenarios: ", DialogueScenarios);
 
 		TriggerDialogue += OnDialogueTrigger;
 		Dialogue = DialogueBox.GetNode<RichTextLabel>("Dialogue");
 		Speaker0 = DialogueBox.GetNode<AnimatedSprite2D>("Speaker0");
-		GD.Print("Speaker got: ", Speaker0.Name);
+		//GD.Print("Speaker got: ", Speaker0.Name);
 		Speaker0.Animation = "player" + CurSpeaker0;
 		Speaker1 = DialogueBox.GetNode<AnimatedSprite2D>("Speaker1");
 		Speaker1.Animation = "player" + CurSpeaker1;
@@ -148,7 +148,7 @@ public partial class HUD : CanvasLayer
 	// Loads secnario to be printed
 	// DialogueLine parameter is the group of lines to grab from the JSON file
 	private void OnDialogueTrigger(string Scenario) {
-		GD.Print("Received signal", Scenario);
+		//GD.Print("Received signal", Scenario);
 		DialogueData = (Godot.Collections.Dictionary)DialogueScenarios[Scenario];
 		CurrentScenario = Scenario;
 		BoardManager.DialogueActive = true;
@@ -158,29 +158,47 @@ public partial class HUD : CanvasLayer
 	private void ContinueDialogue() {
 		if (DialogueData.ContainsKey(CurrentLineIndex.ToString())) {
 			String[] DialogueLine = (String[])DialogueData[CurrentLineIndex.ToString()];
-			//GD.Print("Dialogue: ", DialogueLine[0]);
+			////GD.Print("Dialogue: ", DialogueLine[0]);
 			string Who0 = (string)DialogueLine[0];
 			//Speaker0.Animation = "player" + Who0[0];
-			Speaker0.Frame = (int)Who0[1];
-			//GD.Print("Dialogue2: ", DialogueLine[1]);
+			if (Who0.Contains("none")) {
+				Speaker0.Animation = "none";
+			} else {
+				Speaker0.Animation = (string)"player" + Who0[0];
+				Speaker0.Frame = (int)Who0[1] - '0';
+			}
+			////GD.Print("Dialogue2: ", DialogueLine[1]);
 			string Who1 = (string)DialogueLine[1];
-			//Speaker1.Animation = "player" + Who1[0];
-			Speaker1.Frame = (int)Who1[1];
+			if (Who1.Contains("none")) {
+				//GD.Print("In here");
+				Speaker1.Animation = "none";
+			}
+			else {
+				Speaker1.Animation = (string)"player" + Who1[0];
+				Speaker1.Frame = (int)Who1[1] - '0';
+			}
 
 			Dialogue.Text = DialogueLine[2];
 			
 			InProgress = true;
 			
 			CurrentLineIndex++;
-			// GD.Print("Visible: ", DialogueBox.VisibleCharacters);
-			// GD.Print("Total: ", DialogueBox.Text.Length);
+			// //GD.Print("Visible: ", DialogueBox.VisibleCharacters);
+			// //GD.Print("Total: ", DialogueBox.Text.Length);
 		} else {
 			// key not found, stop dialogue
 			BoardManager.DialogueActive = false;
 			if (CurrentScenario.Contains("Start")) {
 				EmitSignal("EndFirstDialogue");
 				EmitSignal("StartGame");
+				if(BoardManager.CurLevel.Contains("Level0")) {
+					OnHelpPressed();
+				} else {
+
+				}
 			} else {
+				Speaker0.Animation = "player" + CurSpeaker0;
+				Speaker1.Animation = "player" + CurSpeaker1;
 				EmitSignal("EndDialogue");
 			}
 		}
@@ -189,13 +207,28 @@ public partial class HUD : CanvasLayer
 	// X: 0: Neutral, 1: Shocked, 2: Sad, 3: Happy
 	// Y: 0: Alchemist, 1: Demon, 2: Fox
 	private void ChangePortrait(Vector2I WhichPortrait) {
-		GD.Print("Chef");
+		//GD.Print("Chef");
 		GetNode<TileMap>("PortraitControl/Portrait").SetCell(0, new Vector2I(0,0), 0, WhichPortrait);
 	}
 
 	public void OnMusicPressed() {
-		GD.Print("Music pressed");
+		//GD.Print("Music pressed");
 		MusicPlayer.Playing = !MusicPlayer.Playing;
 		BoardManager.Muted = !BoardManager.Muted;
 	}
+
+
+	public void OnHelpPressed() {
+		//GD.Print("Help pressed");
+		OnPausePressed();
+		GetNode<TextureRect>("HelpWindow").Visible = !GetNode<TextureRect>("HelpWindow").Visible;
+	}
+
+	public void OnPausePressed() {
+		//GD.Print("Pause Pressed, game running? ", BoardManager.GameRunning);
+		BoardManager.GameRunning = !BoardManager.GameRunning;
+	}
+
+
 }
+

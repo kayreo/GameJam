@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Ring Ring"
+config/name="Missed Connection"
 run/main_scene="res://scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
@@ -21,8 +21,8 @@ BoardManager="*res://scripts/BoardManager.cs"
 
 [display]
 
-window/size/viewport_width=768
-window/size/viewport_height=432
+window/size/viewport_width=1536
+window/size/viewport_height=864
 
 [dotnet]
 

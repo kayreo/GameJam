@@ -1,12 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmn1c5xvc0skb"]
+[gd_scene load_steps=5 format=3 uid="uid://dmn1c5xvc0skb"]
 
 [ext_resource type="PackedScene" uid="uid://borl80bjqe1m6" path="res://scenes/Board.tscn" id="1_spo3e"]
 [ext_resource type="Script" path="res://scripts/boards/BlackoutBoard.cs" id="2_25a38"]
 [ext_resource type="PackedScene" uid="uid://5mrey0fomfps" path="res://scenes/HUD.tscn" id="2_cq6i5"]
+[ext_resource type="PackedScene" uid="uid://cvk880vvfxl25" path="res://scenes/GameOver.tscn" id="4_gd7og"]
 
 [node name="Level1" type="Node"]
 
 [node name="HUD" parent="." instance=ExtResource("2_cq6i5")]
+CurSpeaker0 = "1"
+CurSpeaker1 = "2"
 
 [node name="Board" parent="." instance=ExtResource("1_spo3e")]
 script = ExtResource("2_25a38")
@@ -14,3 +17,5 @@ script = ExtResource("2_25a38")
 [node name="BlackOutTimer" type="Timer" parent="Board"]
 
 [node name="ResetBlackOutTimer" type="Timer" parent="Board"]
+
+[node name="GameOver" parent="." instance=ExtResource("4_gd7og")]

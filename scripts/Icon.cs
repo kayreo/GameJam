@@ -46,6 +46,8 @@ public partial class Icon : TextureRect
 
 	public bool Locked = false;
 
+	private bool Paused = false;
+
 	[Signal]
 	public delegate void ChangeActiveNodeEventHandler(Icon WhichNode);
 
@@ -70,6 +72,10 @@ public partial class Icon : TextureRect
 				//GD.Print(WireAnim.Frame);
 			}
 			if (WireFilling) { 
+				if (Paused) {
+					WireAnim.Play();
+					Paused = false;
+				}
 				if (WireAnim.Frame == MaxLifespan) {
 						WireFilling = false;
 						WireAnim.SpeedScale = 0;
@@ -95,10 +101,14 @@ public partial class Icon : TextureRect
 							OnSuccessEnter(Exit, reverse);
 						}
 					} else {
-						GD.Print("Game over");
+						BoardManager.GameRunning = false;
+						Board.OnEndLevel();
 					}
 				}
 			}
+		} else {
+			WireAnim.Pause();
+			Paused = true;
 		}
 	}
 

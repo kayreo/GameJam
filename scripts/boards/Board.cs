@@ -59,7 +59,7 @@ public partial class Board : Node
 
 		GridNodes = GetTree().GetNodesInGroup("Grid");
 		Wires = GetTree().GetNodesInGroup("Wire");
-		GD.Print("Nodes: ", GridNodes);
+	//	GD.Print("Nodes: ", GridNodes);
 
 		// Always set first tile to be a straight wire
 		Icon GridNode = (Icon)GridNodes[0];
@@ -120,15 +120,16 @@ public partial class Board : Node
 	}
 
 	public void OnGameStart() {
-		GD.Print("Starting Game");
+	//	GD.Print("Starting Game");
 		Icon GridNode = (Icon)GridNodes[0];
-		GridNode.GetNode<AnimatedSprite2D>("WireAnim").SpeedScale = 0.5F;
+		BoardManager.GameRunning = true;
+		GridNode.GetNode<AnimatedSprite2D>("WireAnim").SpeedScale = 0.25F;
 		GridNode.OnNodeStart();
 	}
 
 	private void OnClickNode(Icon WhichNode) {
 		ClickedNode = WhichNode;
-		GD.Print("Node: ", WhichNode.Name);
+	//	GD.Print("Node: ", WhichNode.Name);
 	}
 
 	public void OnSetData() {
@@ -147,20 +148,20 @@ public partial class Board : Node
 		ToAddPos.Add(Position.Right);
 		WirePos.Add(ToAddPos);
 
-		GD.Print("Wire positions: ", WirePos);
+	//	GD.Print("Wire positions: ", WirePos);
 	}
 
 
 	public void ClickGridSection(Node Who) {
-		GD.Print("Clicked ", Who.Name);
+	//	GD.Print("Clicked ", Who.Name);
 		int GetIndex;
 		if (CurClick == null) {
-			GD.Print("First click");
+		//	GD.Print("First click");
 			GetIndex = GridNodes.IndexOf(Who);
 			EmitSignal("ClickNode", (Icon)Who);
 			CurClick = GridNodes[GetIndex];
 		} else {
-			GD.Print("Second click");
+		//	GD.Print("Second click");
 			GetIndex = GridNodes.IndexOf(Who);
 			SwapClick = GridNodes[GetIndex];
 			EmitSignal("ChangeGrid", CurClick.Name, (Icon)SwapClick);
@@ -171,7 +172,7 @@ public partial class Board : Node
 
 
 	public void OnChangeActiveNode(Icon WhichNode) {
-		GD.Print("Active Node!", WhichNode.Name);
+	//	GD.Print("Active Node!", WhichNode.Name);
 		ActiveIcon = WhichNode;
 		if (GridNodes.IndexOf((Node)ActiveIcon) == GridNodes.Count - 1) {
 			if (ActiveIcon.ExitPos == Board.Position.Right) {
@@ -186,9 +187,20 @@ public partial class Board : Node
 		}
 	}
 
-	private void OnEndLevel() {
+	public void OnEndLevel() {
 		GD.Print("Woop");
-		GetParent().GetNode<CanvasLayer>("HUD").EmitSignal("TriggerDialogue", BoardManager.CurLevel + "End");
+		if (BoardManager.LevelSuccess) {
+			GetParent().GetNode<CanvasLayer>("HUD").EmitSignal("TriggerDialogue", BoardManager.CurLevel + "End");
+			GetParent().GetNode<CanvasLayer>("GameOver").GetNode<TextureRect>("Win").Show();
+			GetParent().GetNode<CanvasLayer>("HUD").GetNode<TextureRect>("Border").GetNode<AnimatedSprite2D>("Phone").Frame = 1;
+			if (!BoardManager.Muted) {
+				GetParent().GetNode<CanvasLayer>("HUD").GetNode<AudioStreamPlayer>("Music").Stop();
+				GetParent().GetNode<CanvasLayer>("HUD").GetNode<AudioStreamPlayer>("WinJingle").Play();
+			}
+		} else {
+			GetParent().GetNode<CanvasLayer>("GameOver").GetNode<TextureRect>("Lose").Show();
+			GetParent().GetNode<CanvasLayer>("GameOver").GetNode<TextureButton>("BackButton").Show();
+		}
 	}
 
 }

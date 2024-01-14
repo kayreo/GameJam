@@ -449,6 +449,7 @@ texture_filter = 1
 custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 60.0
+scale = Vector2(2, 2)
 texture = ExtResource("1_rld72")
 script = ExtResource("2_se2kj")
 
@@ -470,6 +471,7 @@ position = Vector2(30, 30)
 scale = Vector2(1.875, 1.875)
 sprite_frames = SubResource("SpriteFrames_nmxtw")
 animation = &"Elbow"
+speed_scale = 0.5
 
 [node name="SelectBorder" type="TextureRect" parent="."]
 visible = false

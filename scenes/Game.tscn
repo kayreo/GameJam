@@ -1,7 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhpjl7sk1bsnc"]
+[gd_scene load_steps=3 format=3 uid="uid://bhpjl7sk1bsnc"]
 
 [ext_resource type="PackedScene" uid="uid://d1cnhdp1wmysl" path="res://scenes/MainMenu.tscn" id="1_tkjld"]
+[ext_resource type="AudioStream" uid="uid://cmckliegbliph" path="res://music/JamTheme.mp3" id="2_xeoak"]
 
 [node name="Game" type="Node"]
 
 [node name="MainMenu" parent="." instance=ExtResource("1_tkjld")]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_xeoak")
+autoplay = true
