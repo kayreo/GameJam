@@ -23,10 +23,6 @@
 		"5": [
 			"01", "none",
 			"Looks like I'll need to fix this up before I can call Gigi."
-		],
-		"6": [
-			"02", "none",
-			"(To start, press the question mark in the corner of the screen!)"
 		]
 	},
 	"Level0End": {
@@ -160,29 +156,25 @@
 		],
 		"2": [
 			"21", "30",
-			"well, i just wanted to say from all of us..."
-		],
-		"3": [
-			"21", "30",
 			"happy birthday."
 		],
-		"4": [
+		"3": [
 			"20", "31",
 			"wow, really?! yippee!! hooray!! "
 		],
-		"5": [
+		"4": [
 			"20", "31",
 			"so jolly! so very, very jolly! "
 		],
-		"6": [
+		"5": [
 			"20", "31",
 			"so jolly!!!!!!!!!!!"
 		],
-		"7": [
+		"6": [
 			"20", "31",
 			"you're all the best friends around!"
 		],
-		"8": [
+		"7": [
 			"21", "31",
 			"...hehe, i know."
 		]

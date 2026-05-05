@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://dafw54lhljcqf"]
+
+[ext_resource type="PackedScene" uid="uid://d1cnhdp1wmysl" path="res://scenes/MainMenu.tscn" id="1_ryh3g"]
+[ext_resource type="AudioStream" uid="uid://drleqb66xe1gg" path="res://music/JamTheme.ogg" id="2_2svck"]
+[ext_resource type="Script" path="res://scripts/Music.gd" id="3_rpjo4"]
+[ext_resource type="AudioStream" uid="uid://jq52cbctsb5h" path="res://music/win.mp3" id="3_wwoc6"]
+[ext_resource type="Script" path="res://scripts/WinJingle.gd" id="5_o7lef"]
+
+[node name="SceneManager" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="MainMenu" parent="." instance=ExtResource("1_ryh3g")]
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_2svck")
+volume_db = -10.0
+autoplay = true
+script = ExtResource("3_rpjo4")
+
+[node name="WinJingle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_wwoc6")
+script = ExtResource("5_o7lef")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

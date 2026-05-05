@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Missed Connection"
-run/main_scene="res://scenes/MainMenu.tscn"
-config/features=PackedStringArray("4.2", "C#", "Forward Plus")
+run/main_scene="res://scenes/SceneManager.tscn"
+config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-BoardManager="*res://scripts/BoardManager.cs"
+BoardManager="*res://scripts/BoardManager.gd"
 
 [display]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=64 format=3 uid="uid://4ovrit8qcbd1"]
 
 [ext_resource type="Texture2D" uid="uid://kgjk11ow1c3j" path="res://sprites/Wires/Border.png" id="1_rld72"]
-[ext_resource type="Script" path="res://scripts/Icon.cs" id="2_se2kj"]
+[ext_resource type="Script" path="res://scripts/Icon.gd" id="2_hhcx1"]
 [ext_resource type="Texture2D" uid="uid://d1hgfui5ucg7x" path="res://sprites/Wires/Elbow.png" id="4_hba0l"]
 [ext_resource type="Texture2D" uid="uid://cgg4iydvc8b4i" path="res://sprites/Wires/SelectBorder.png" id="5_2o4cs"]
 [ext_resource type="Texture2D" uid="uid://b25y6glk2kbja" path="res://sprites/Wires/FillSheet.png" id="6_gphh8"]
@@ -451,7 +451,7 @@ offset_right = 60.0
 offset_bottom = 60.0
 scale = Vector2(2, 2)
 texture = ExtResource("1_rld72")
-script = ExtResource("2_se2kj")
+script = ExtResource("2_hhcx1")
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -470,7 +470,7 @@ texture_filter = 1
 position = Vector2(30, 30)
 scale = Vector2(1.875, 1.875)
 sprite_frames = SubResource("SpriteFrames_nmxtw")
-animation = &"Elbow"
+animation = &"ElbowR"
 speed_scale = 0.5
 
 [node name="SelectBorder" type="TextureRect" parent="."]
@@ -481,6 +481,6 @@ offset_bottom = 30.0
 scale = Vector2(2, 2)
 texture = ExtResource("5_2o4cs")
 
-[connection signal="input_event" from="Area2D" to="." method="_OnArea2DInputEvent"]
-[connection signal="mouse_entered" from="Area2D" to="." method="_OnArea2DMouseEntered"]
-[connection signal="mouse_exited" from="Area2D" to="." method="_OnArea2DMouseExited"]
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
